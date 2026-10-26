@@ -1,5 +1,7 @@
 # ANKA · 前哨突击（Vue + Three.js）
 
+![1793031776170](image/README/1793031776170.png)
+
 **1.1 更新**：默认第一人称，按 V 或视角按钮切换；加入双方同步的五类地面补给，靠近 / F / 点击拾取；对战地图扩大并增加遮挡，复活优先远离敌人。详见 [本次玩法说明](docs/GAMEPLAY-1.1.md)。
 
 游戏首页为 `index.html`，角色动作实验室为 `characters.html`。已接入你提供的两份 Mixamo FBX，男女角色各有 16 段动画；游戏使用新版 `assets/characters/mixamo/*_aim.glb`。原始 Tripo 资产保留。完整16动作的可编辑源文件为 `source/male_scout_game.blend` 与 `source/female_striker_game.blend`。
@@ -110,4 +112,3 @@ npm run build
 女角色：建模 50 + 免费检查 0 + 绑骨 25 + 五动画 50 = **125 积分**。
 
 总计 **250 积分**，余额从 600 变为 **350 积分**，冻结积分为 0。每项任务的完整 Task ID 和实际扣费记录在 `reports/tripo/cost-report.md`。所有生成均在国内环境 `cn` 完成，没有读取或写入项目 API Key。
-# anka-outpost-strike
