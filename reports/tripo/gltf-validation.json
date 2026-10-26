@@ -1,0 +1,100 @@
+[
+  {
+    "id": "male_scout",
+    "filename": "assets/characters/tripo/male_scout_animated.glb",
+    "bytes": 7415048,
+    "triangles": 19800,
+    "bones": 65,
+    "materials": 1,
+    "textures": 3,
+    "embeddedImages": true,
+    "baseColorTextured": true,
+    "clips": [
+      {
+        "name": "Idle",
+        "duration": 15.333333333333334,
+        "channels": 195
+      },
+      {
+        "name": "Jump",
+        "duration": 2.2,
+        "channels": 195
+      },
+      {
+        "name": "Run",
+        "duration": 1.2333333333333334,
+        "channels": 195
+      },
+      {
+        "name": "Shoot",
+        "duration": 9.033333333333333,
+        "channels": 195
+      },
+      {
+        "name": "Walk",
+        "duration": 2.3333333333333335,
+        "channels": 195
+      }
+    ],
+    "errors": 0,
+    "warnings": 1,
+    "messages": [
+      {
+        "code": "NODE_SKINNED_MESH_NON_ROOT",
+        "message": "Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh.",
+        "severity": 1,
+        "pointer": "/nodes/65"
+      }
+    ],
+    "failures": []
+  },
+  {
+    "id": "female_striker",
+    "filename": "assets/characters/tripo/female_striker_animated.glb",
+    "bytes": 7639332,
+    "triangles": 19800,
+    "bones": 65,
+    "materials": 1,
+    "textures": 3,
+    "embeddedImages": true,
+    "baseColorTextured": true,
+    "clips": [
+      {
+        "name": "Idle",
+        "duration": 15.333333333333334,
+        "channels": 195
+      },
+      {
+        "name": "Jump",
+        "duration": 2.2,
+        "channels": 195
+      },
+      {
+        "name": "Run",
+        "duration": 1.2333333333333334,
+        "channels": 195
+      },
+      {
+        "name": "Shoot",
+        "duration": 9.033333333333333,
+        "channels": 195
+      },
+      {
+        "name": "Walk",
+        "duration": 2.3333333333333335,
+        "channels": 195
+      }
+    ],
+    "errors": 0,
+    "warnings": 1,
+    "messages": [
+      {
+        "code": "NODE_SKINNED_MESH_NON_ROOT",
+        "message": "Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh.",
+        "severity": 1,
+        "pointer": "/nodes/65"
+      }
+    ],
+    "failures": []
+  }
+]

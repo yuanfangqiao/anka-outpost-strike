@@ -1,0 +1,819 @@
+{
+  "source_fbx": "/Users/vitcou/workplace/anka-3d-game/anka-outpost-strike/Rifle Down To Aim.fbx",
+  "target_glb": "/Users/vitcou/workplace/anka-3d-game/anka-outpost-strike/assets/characters/tripo/female_striker_animated.glb",
+  "output_glb": "/Users/vitcou/workplace/anka-3d-game/anka-outpost-strike/reports/mixamo/female-aim-raise.glb",
+  "source_action": "Armature|mixamo.com|Layer0",
+  "clip_name": "AimRaise",
+  "replaced_existing": false,
+  "preserved_target_clips": [
+    "Idle",
+    "Jump",
+    "Run",
+    "Shoot",
+    "Walk"
+  ],
+  "source_fps": 30.0,
+  "output_fps": 30,
+  "duration_seconds": 0.8666666666666667,
+  "samples": 27,
+  "target_bones": 65,
+  "mapped_bones": 65,
+  "unmapped_target_bones": [],
+  "unmapped_source_bones": [],
+  "bone_mapping_and_rest_corrections": [
+    {
+      "target": "mixamorig:Hips",
+      "source": "mixamorig1:Hips",
+      "rest_swing_degrees": 4.9545
+    },
+    {
+      "target": "mixamorig:LeftUpLeg",
+      "source": "mixamorig1:LeftUpLeg",
+      "rest_swing_degrees": 12.7925
+    },
+    {
+      "target": "mixamorig:LeftLeg",
+      "source": "mixamorig1:LeftLeg",
+      "rest_swing_degrees": 15.5034
+    },
+    {
+      "target": "mixamorig:LeftFoot",
+      "source": "mixamorig1:LeftFoot",
+      "rest_swing_degrees": 11.1998
+    },
+    {
+      "target": "mixamorig:LeftToeBase",
+      "source": "mixamorig1:LeftToeBase",
+      "rest_swing_degrees": 10.324
+    },
+    {
+      "target": "mixamorig:LeftToe_End",
+      "source": "mixamorig1:LeftToe_End",
+      "rest_swing_degrees": 10.324
+    },
+    {
+      "target": "mixamorig:RightUpLeg",
+      "source": "mixamorig1:RightUpLeg",
+      "rest_swing_degrees": 12.9251
+    },
+    {
+      "target": "mixamorig:RightLeg",
+      "source": "mixamorig1:RightLeg",
+      "rest_swing_degrees": 15.7673
+    },
+    {
+      "target": "mixamorig:RightFoot",
+      "source": "mixamorig1:RightFoot",
+      "rest_swing_degrees": 8.2558
+    },
+    {
+      "target": "mixamorig:RightToeBase",
+      "source": "mixamorig1:RightToeBase",
+      "rest_swing_degrees": 7.6072
+    },
+    {
+      "target": "mixamorig:RightToe_End",
+      "source": "mixamorig1:RightToe_End",
+      "rest_swing_degrees": 7.6073
+    },
+    {
+      "target": "mixamorig:Spine",
+      "source": "mixamorig1:Spine",
+      "rest_swing_degrees": 6.0936
+    },
+    {
+      "target": "mixamorig:Spine1",
+      "source": "mixamorig1:Spine1",
+      "rest_swing_degrees": 6.0936
+    },
+    {
+      "target": "mixamorig:Spine2",
+      "source": "mixamorig1:Spine2",
+      "rest_swing_degrees": 17.172
+    },
+    {
+      "target": "mixamorig:LeftShoulder",
+      "source": "mixamorig1:LeftShoulder",
+      "rest_swing_degrees": 15.8536
+    },
+    {
+      "target": "mixamorig:LeftArm",
+      "source": "mixamorig1:LeftArm",
+      "rest_swing_degrees": 60.2965
+    },
+    {
+      "target": "mixamorig:LeftForeArm",
+      "source": "mixamorig1:LeftForeArm",
+      "rest_swing_degrees": 52.2478
+    },
+    {
+      "target": "mixamorig:LeftHand",
+      "source": "mixamorig1:LeftHand",
+      "rest_swing_degrees": 61.1087
+    },
+    {
+      "target": "mixamorig:LeftHandIndex1",
+      "source": "mixamorig1:LeftHandIndex1",
+      "rest_swing_degrees": 72.628
+    },
+    {
+      "target": "mixamorig:LeftHandIndex2",
+      "source": "mixamorig1:LeftHandIndex2",
+      "rest_swing_degrees": 98.6345
+    },
+    {
+      "target": "mixamorig:LeftHandIndex3",
+      "source": "mixamorig1:LeftHandIndex3",
+      "rest_swing_degrees": 98.6382
+    },
+    {
+      "target": "mixamorig:LeftHandIndex4",
+      "source": "mixamorig1:LeftHandIndex4",
+      "rest_swing_degrees": 98.6382
+    },
+    {
+      "target": "mixamorig:LeftHandMiddle1",
+      "source": "mixamorig1:LeftHandMiddle1",
+      "rest_swing_degrees": 78.1178
+    },
+    {
+      "target": "mixamorig:LeftHandMiddle2",
+      "source": "mixamorig1:LeftHandMiddle2",
+      "rest_swing_degrees": 97.7378
+    },
+    {
+      "target": "mixamorig:LeftHandMiddle3",
+      "source": "mixamorig1:LeftHandMiddle3",
+      "rest_swing_degrees": 97.7379
+    },
+    {
+      "target": "mixamorig:LeftHandMiddle4",
+      "source": "mixamorig1:LeftHandMiddle4",
+      "rest_swing_degrees": 97.7379
+    },
+    {
+      "target": "mixamorig:LeftHandPinky1",
+      "source": "mixamorig1:LeftHandPinky1",
+      "rest_swing_degrees": 93.8161
+    },
+    {
+      "target": "mixamorig:LeftHandPinky2",
+      "source": "mixamorig1:LeftHandPinky2",
+      "rest_swing_degrees": 102.356
+    },
+    {
+      "target": "mixamorig:LeftHandPinky3",
+      "source": "mixamorig1:LeftHandPinky3",
+      "rest_swing_degrees": 102.3518
+    },
+    {
+      "target": "mixamorig:LeftHandPinky4",
+      "source": "mixamorig1:LeftHandPinky4",
+      "rest_swing_degrees": 102.3518
+    },
+    {
+      "target": "mixamorig:LeftHandRing1",
+      "source": "mixamorig1:LeftHandRing1",
+      "rest_swing_degrees": 82.8283
+    },
+    {
+      "target": "mixamorig:LeftHandRing2",
+      "source": "mixamorig1:LeftHandRing2",
+      "rest_swing_degrees": 111.7889
+    },
+    {
+      "target": "mixamorig:LeftHandRing3",
+      "source": "mixamorig1:LeftHandRing3",
+      "rest_swing_degrees": 111.7922
+    },
+    {
+      "target": "mixamorig:LeftHandRing4",
+      "source": "mixamorig1:LeftHandRing4",
+      "rest_swing_degrees": 111.7922
+    },
+    {
+      "target": "mixamorig:LeftHandThumb1",
+      "source": "mixamorig1:LeftHandThumb1",
+      "rest_swing_degrees": 53.4728
+    },
+    {
+      "target": "mixamorig:LeftHandThumb2",
+      "source": "mixamorig1:LeftHandThumb2",
+      "rest_swing_degrees": 55.1593
+    },
+    {
+      "target": "mixamorig:LeftHandThumb3",
+      "source": "mixamorig1:LeftHandThumb3",
+      "rest_swing_degrees": 52.3809
+    },
+    {
+      "target": "mixamorig:LeftHandThumb4",
+      "source": "mixamorig1:LeftHandThumb4",
+      "rest_swing_degrees": 52.3809
+    },
+    {
+      "target": "mixamorig:Neck",
+      "source": "mixamorig1:Neck",
+      "rest_swing_degrees": 10.665
+    },
+    {
+      "target": "mixamorig:Head",
+      "source": "mixamorig1:Head",
+      "rest_swing_degrees": 10.665
+    },
+    {
+      "target": "mixamorig:HeadTop_End",
+      "source": "mixamorig1:HeadTop_End",
+      "rest_swing_degrees": 10.665
+    },
+    {
+      "target": "mixamorig:RightShoulder",
+      "source": "mixamorig1:RightShoulder",
+      "rest_swing_degrees": 15.4359
+    },
+    {
+      "target": "mixamorig:RightArm",
+      "source": "mixamorig1:RightArm",
+      "rest_swing_degrees": 60.27
+    },
+    {
+      "target": "mixamorig:RightForeArm",
+      "source": "mixamorig1:RightForeArm",
+      "rest_swing_degrees": 49.4011
+    },
+    {
+      "target": "mixamorig:RightHand",
+      "source": "mixamorig1:RightHand",
+      "rest_swing_degrees": 64.0354
+    },
+    {
+      "target": "mixamorig:RightHandIndex1",
+      "source": "mixamorig1:RightHandIndex1",
+      "rest_swing_degrees": 79.6289
+    },
+    {
+      "target": "mixamorig:RightHandIndex2",
+      "source": "mixamorig1:RightHandIndex2",
+      "rest_swing_degrees": 102.0928
+    },
+    {
+      "target": "mixamorig:RightHandIndex3",
+      "source": "mixamorig1:RightHandIndex3",
+      "rest_swing_degrees": 102.1084
+    },
+    {
+      "target": "mixamorig:RightHandIndex4",
+      "source": "mixamorig1:RightHandIndex4",
+      "rest_swing_degrees": 102.1084
+    },
+    {
+      "target": "mixamorig:RightHandMiddle1",
+      "source": "mixamorig1:RightHandMiddle1",
+      "rest_swing_degrees": 83.7029
+    },
+    {
+      "target": "mixamorig:RightHandMiddle2",
+      "source": "mixamorig1:RightHandMiddle2",
+      "rest_swing_degrees": 101.7445
+    },
+    {
+      "target": "mixamorig:RightHandMiddle3",
+      "source": "mixamorig1:RightHandMiddle3",
+      "rest_swing_degrees": 101.7501
+    },
+    {
+      "target": "mixamorig:RightHandMiddle4",
+      "source": "mixamorig1:RightHandMiddle4",
+      "rest_swing_degrees": 101.7501
+    },
+    {
+      "target": "mixamorig:RightHandPinky1",
+      "source": "mixamorig1:RightHandPinky1",
+      "rest_swing_degrees": 94.7385
+    },
+    {
+      "target": "mixamorig:RightHandPinky2",
+      "source": "mixamorig1:RightHandPinky2",
+      "rest_swing_degrees": 113.4674
+    },
+    {
+      "target": "mixamorig:RightHandPinky3",
+      "source": "mixamorig1:RightHandPinky3",
+      "rest_swing_degrees": 113.4699
+    },
+    {
+      "target": "mixamorig:RightHandPinky4",
+      "source": "mixamorig1:RightHandPinky4",
+      "rest_swing_degrees": 113.4699
+    },
+    {
+      "target": "mixamorig:RightHandRing1",
+      "source": "mixamorig1:RightHandRing1",
+      "rest_swing_degrees": 88.1601
+    },
+    {
+      "target": "mixamorig:RightHandRing2",
+      "source": "mixamorig1:RightHandRing2",
+      "rest_swing_degrees": 114.187
+    },
+    {
+      "target": "mixamorig:RightHandRing3",
+      "source": "mixamorig1:RightHandRing3",
+      "rest_swing_degrees": 114.1928
+    },
+    {
+      "target": "mixamorig:RightHandRing4",
+      "source": "mixamorig1:RightHandRing4",
+      "rest_swing_degrees": 114.1928
+    },
+    {
+      "target": "mixamorig:RightHandThumb1",
+      "source": "mixamorig1:RightHandThumb1",
+      "rest_swing_degrees": 53.1731
+    },
+    {
+      "target": "mixamorig:RightHandThumb2",
+      "source": "mixamorig1:RightHandThumb2",
+      "rest_swing_degrees": 53.0648
+    },
+    {
+      "target": "mixamorig:RightHandThumb3",
+      "source": "mixamorig1:RightHandThumb3",
+      "rest_swing_degrees": 51.486
+    },
+    {
+      "target": "mixamorig:RightHandThumb4",
+      "source": "mixamorig1:RightHandThumb4",
+      "rest_swing_degrees": 51.486
+    }
+  ],
+  "pelvis_vertical_scale_ratio": 0.8049773887792963,
+  "horizontal_pelvis_displacement_removed": true,
+  "pelvis_vertical_offset_range_m": [
+    -0.03785266332363971,
+    -0.018651228591305465
+  ],
+  "wrist_distance_range_m": [
+    0.2581958940888646,
+    0.2735362517475552
+  ],
+  "pose_samples": [
+    {
+      "fraction": 0.0,
+      "frame": 1.0,
+      "bones": {
+        "hips": {
+          "position_world": [
+            -0.0421345,
+            -0.192249,
+            0.8775433
+          ],
+          "rotation_world_wxyz": [
+            0.5060086,
+            0.4297986,
+            -0.5934009,
+            -0.4550867
+          ]
+        },
+        "spine": {
+          "position_world": [
+            -0.0473092,
+            -0.1812559,
+            0.9628534
+          ],
+          "rotation_world_wxyz": [
+            0.5085258,
+            0.4500811,
+            -0.5590147,
+            -0.4757428
+          ]
+        },
+        "head": {
+          "position_world": [
+            -0.0537297,
+            -0.1456283,
+            1.3808631
+          ],
+          "rotation_world_wxyz": [
+            0.4695168,
+            0.493809,
+            -0.5230693,
+            -0.5119623
+          ]
+        },
+        "leftarm": {
+          "position_world": [
+            0.0761429,
+            -0.1674086,
+            1.1754556
+          ],
+          "rotation_world_wxyz": [
+            0.4954349,
+            -0.2452172,
+            0.4235556,
+            -0.7176444
+          ]
+        },
+        "leftforearm": {
+          "position_world": [
+            0.171206,
+            -0.1957916,
+            1.0147581
+          ],
+          "rotation_world_wxyz": [
+            0.1146341,
+            0.4390014,
+            -0.0998452,
+            0.8855324
+          ]
+        },
+        "lefthand": {
+          "position_world": [
+            0.1144353,
+            -0.3820625,
+            0.9998797
+          ],
+          "rotation_world_wxyz": [
+            0.1322687,
+            -0.9707875,
+            0.1909005,
+            -0.0602798
+          ]
+        },
+        "rightarm": {
+          "position_world": [
+            -0.1823096,
+            -0.1602467,
+            1.1853087
+          ],
+          "rotation_world_wxyz": [
+            0.3992535,
+            -0.8147604,
+            0.3860058,
+            -0.166619
+          ]
+        },
+        "rightforearm": {
+          "position_world": [
+            -0.2759742,
+            -0.2326149,
+            1.0381479
+          ],
+          "rotation_world_wxyz": [
+            0.195547,
+            -0.7498322,
+            -0.3348224,
+            -0.5361035
+          ]
+        },
+        "righthand": {
+          "position_world": [
+            -0.1429789,
+            -0.3632788,
+            1.050432
+          ],
+          "rotation_world_wxyz": [
+            0.5453989,
+            -0.5604407,
+            -0.1846027,
+            -0.5952882
+          ]
+        },
+        "leftfoot": {
+          "position_world": [
+            0.1537807,
+            -0.3877974,
+            0.1761698
+          ],
+          "rotation_world_wxyz": [
+            0.1783192,
+            -0.3069986,
+            0.1876794,
+            -0.9158224
+          ]
+        },
+        "rightfoot": {
+          "position_world": [
+            -0.1517365,
+            -0.1790623,
+            0.1467691
+          ],
+          "rotation_world_wxyz": [
+            0.2158119,
+            0.1700238,
+            -0.3061847,
+            0.9114648
+          ]
+        }
+      }
+    },
+    {
+      "fraction": 0.5,
+      "frame": 14.0,
+      "bones": {
+        "hips": {
+          "position_world": [
+            -0.0421345,
+            -0.1935334,
+            0.8659831
+          ],
+          "rotation_world_wxyz": [
+            0.3994781,
+            0.2595845,
+            -0.6898287,
+            -0.5451327
+          ]
+        },
+        "spine": {
+          "position_world": [
+            -0.0397525,
+            -0.1764781,
+            0.9504158
+          ],
+          "rotation_world_wxyz": [
+            0.3071483,
+            0.2593516,
+            -0.692529,
+            -0.5989994
+          ]
+        },
+        "head": {
+          "position_world": [
+            -0.1397535,
+            -0.2333217,
+            1.3461587
+          ],
+          "rotation_world_wxyz": [
+            0.1982159,
+            0.5013393,
+            -0.5752523,
+            -0.6151863
+          ]
+        },
+        "leftarm": {
+          "position_world": [
+            0.0141322,
+            -0.2918756,
+            1.1842089
+          ],
+          "rotation_world_wxyz": [
+            0.0823493,
+            -0.3839898,
+            0.2087253,
+            -0.8956586
+          ]
+        },
+        "leftforearm": {
+          "position_world": [
+            0.011718,
+            -0.4617139,
+            1.1016535
+          ],
+          "rotation_world_wxyz": [
+            0.4393619,
+            0.4286585,
+            0.1007486,
+            0.7829832
+          ]
+        },
+        "lefthand": {
+          "position_world": [
+            -0.1057832,
+            -0.5776469,
+            1.2060286
+          ],
+          "rotation_world_wxyz": [
+            0.0396476,
+            0.9252515,
+            -0.3573568,
+            0.1209706
+          ]
+        },
+        "rightarm": {
+          "position_world": [
+            -0.1882363,
+            -0.0988247,
+            1.1685197
+          ],
+          "rotation_world_wxyz": [
+            0.2189948,
+            -0.7642012,
+            0.4171987,
+            -0.4404351
+          ]
+        },
+        "rightforearm": {
+          "position_world": [
+            -0.2722285,
+            -0.2038234,
+            1.0359033
+          ],
+          "rotation_world_wxyz": [
+            0.1342812,
+            0.7343915,
+            0.3284747,
+            0.5785691
+          ]
+        },
+        "righthand": {
+          "position_world": [
+            -0.2111154,
+            -0.343612,
+            1.1437738
+          ],
+          "rotation_world_wxyz": [
+            0.0353135,
+            -0.5272893,
+            -0.0783719,
+            -0.8453264
+          ]
+        },
+        "leftfoot": {
+          "position_world": [
+            0.093873,
+            -0.5083421,
+            0.1860512
+          ],
+          "rotation_world_wxyz": [
+            0.1608132,
+            -0.301641,
+            0.1935296,
+            -0.9196185
+          ]
+        },
+        "rightfoot": {
+          "position_world": [
+            -0.1391537,
+            -0.0843292,
+            0.1394613
+          ],
+          "rotation_world_wxyz": [
+            0.2155315,
+            0.1695452,
+            -0.3076158,
+            0.9111384
+          ]
+        }
+      }
+    },
+    {
+      "fraction": 1.0,
+      "frame": 27.0,
+      "bones": {
+        "hips": {
+          "position_world": [
+            -0.0421345,
+            -0.1939107,
+            0.8625875
+          ],
+          "rotation_world_wxyz": [
+            0.3755749,
+            0.2104812,
+            -0.7027318,
+            -0.5664003
+          ]
+        },
+        "spine": {
+          "position_world": [
+            -0.0359196,
+            -0.1763863,
+            0.9467285
+          ],
+          "rotation_world_wxyz": [
+            0.3409082,
+            0.2521814,
+            -0.6891361,
+            -0.5876032
+          ]
+        },
+        "head": {
+          "position_world": [
+            -0.1240654,
+            -0.2420934,
+            1.3414066
+          ],
+          "rotation_world_wxyz": [
+            0.1934438,
+            0.4967799,
+            -0.5674582,
+            -0.6275194
+          ]
+        },
+        "leftarm": {
+          "position_world": [
+            0.0302824,
+            -0.2955008,
+            1.1900152
+          ],
+          "rotation_world_wxyz": [
+            0.0227911,
+            -0.4416957,
+            0.2243063,
+            -0.8683734
+          ]
+        },
+        "leftforearm": {
+          "position_world": [
+            0.000336,
+            -0.4651558,
+            1.1126419
+          ],
+          "rotation_world_wxyz": [
+            0.4256631,
+            0.4914575,
+            0.0866587,
+            0.7548316
+          ]
+        },
+        "lefthand": {
+          "position_world": [
+            -0.1085286,
+            -0.5867487,
+            1.2199024
+          ],
+          "rotation_world_wxyz": [
+            0.0543412,
+            0.9106361,
+            -0.4003713,
+            0.0865554
+          ]
+        },
+        "rightarm": {
+          "position_world": [
+            -0.1780751,
+            -0.0935984,
+            1.1835175
+          ],
+          "rotation_world_wxyz": [
+            0.1739417,
+            -0.8082396,
+            0.4399451,
+            -0.35063
+          ]
+        },
+        "rightforearm": {
+          "position_world": [
+            -0.289346,
+            -0.1979195,
+            1.0721513
+          ],
+          "rotation_world_wxyz": [
+            0.0950518,
+            0.7928808,
+            0.3455165,
+            0.4928727
+          ]
+        },
+        "righthand": {
+          "position_world": [
+            -0.2044784,
+            -0.3367779,
+            1.1639531
+          ],
+          "rotation_world_wxyz": [
+            0.001073,
+            0.5584532,
+            0.04884,
+            0.8280963
+          ]
+        },
+        "leftfoot": {
+          "position_world": [
+            0.0926189,
+            -0.4977204,
+            0.1842498
+          ],
+          "rotation_world_wxyz": [
+            0.1604924,
+            -0.3016554,
+            0.1934103,
+            -0.9196949
+          ]
+        },
+        "rightfoot": {
+          "position_world": [
+            -0.1374972,
+            -0.1090209,
+            0.1433778
+          ],
+          "rotation_world_wxyz": [
+            0.3520354,
+            0.1073491,
+            -0.3320027,
+            0.8685169
+          ]
+        }
+      }
+    }
+  ],
+  "tangent_repair": {
+    "normalized": 23383,
+    "zero_tangents": 3
+  },
+  "method": "Anatomical body-space rotations; virtual rest T-pose swing alignment preserving roll; target-length FK; vertical pelvis displacement only",
+  "limitations": [
+    "No weapon-grip IK; inspect hands and shoulders for chibi proportions.",
+    "Ground-contact IK is not solved.",
+    "Uniform non-mirrored armature object transforms only."
+  ]
+}

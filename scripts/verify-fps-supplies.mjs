@@ -1,0 +1,53 @@
+import assert from 'node:assert/strict';
+import {Vector3} from 'three';
+import {fixture} from './game-fixture.mjs';
+import {chooseSpawn,hiddenFrom} from '../game/arena-layout.js';
+import {Perspective,updateGameCamera} from '../game/perspective.js';
+import {OnlineDuel} from '../game/online-duel.js';
+import {act} from '../game/online-combat.js';
+import {WEAPONS} from '../game/config.js';
+import {applySupply} from '../game/supplies.js';
+const p=(x=0,y=0,z=0)=>new Vector3(x,y,z);
+const reports=[];
+const bag={hp:100,medkits:4,grenades:5,shieldCharges:3,inventory:WEAPONS.map(w=>({ammo:w.mag,reserve:w.reserve*2-1}))};
+for(const kind of ['health','medkit','grenade','shield','ammo'])assert.equal(applySupply(bag,kind),true);
+assert.deepEqual([bag.hp,bag.medkits,bag.grenades,bag.shieldCharges],[120,5,6,4]);
+for(const kind of ['health','medkit','grenade','shield','ammo'])assert.equal(applySupply(bag,kind),false,'full inventory must not consume a station');
+for(const theme of ['desert','jungle','snow','city']){
+ const g=fixture(theme);await g.start({mode:'versus',map:theme});const enemy=g.duel.bot.actor.group.position;
+ assert.ok(g.player.group.position.distanceTo(enemy)>=30,'opening spawn separation');
+ assert.ok(hiddenFrom(g,g.player.group.position,[enemy]),'opening spawn must have solid cover');
+ assert.equal(g.minimap().enemies.length,0,'hidden enemy must not appear on radar');
+ for(const threat of g.world.duelSpawns){const spawn=chooseSpawn(g,[threat],g.player.group.position,g.duel.nav);
+  assert.ok(g.duel.nav.clear(spawn));assert.ok(spawn.distanceTo(threat)>=22,'respawn distance');
+  assert.ok(hiddenFrom(g,spawn,[threat]),`${theme}: respawn exposed`);
+  assert.ok(g.duel.nav.path(spawn,p(0,0,8)).length,'spawn must have an escape route');
+ }
+ g.state.perspective='first';g.lookYaw=.5;g.lookPitch=.3;g.aimNdc.set(.8,.8);updateGameCamera(g,.016);
+ assert.ok(g.camera.position.distanceTo(g.player.group.position.clone().add(p(0,1.58,0)))<1e-6);
+ assert.ok(g.camera.getWorldDirection(p()).dot(p(Math.sin(.5)*Math.cos(.3),Math.sin(.3),Math.cos(.5)*Math.cos(.3)))>.999);
+ assert.deepEqual(g.aimNdc.toArray(),[0,0]);g.keys.add('KeyC');updateGameCamera(g,.016);assert.ok(Math.abs(g.camera.position.y-g.player.group.position.y-1.08)<1e-6);g.keys.clear();
+ const view=new Perspective(g);g.view=view;view.set('first');assert.equal(g.player.group.visible,false);assert.equal(view.rig.visible,true);
+ view.set('third');assert.equal(g.player.group.visible,true);assert.equal(view.rig.visible,false);
+ view.set('first');g.state.phase='menu';view.sync(.016);assert.equal(g.player.group.visible,true);assert.equal(view.rig.visible,false);view.dispose();g.view=null;g.state.phase='playing';
+ const health=g.pickups.find(n=>n.kind==='health');g.player.group.position.copy(health.mesh.position).setY(0);g.state.hp=70;g.updatePickups(.01);
+ assert.equal(g.state.hp,115);assert.ok(health.cooldown>0);g.state.hp=0;health.cooldown=0;g.updatePickups(.01);assert.equal(g.state.hp,0);assert.equal(health.cooldown,0);
+ g.clearBattle();g.world.dispose();reports.push({map:theme,coveredSpawns:10,firstPerson:'passed',pickups:'passed'});
+}
+const room={host:'host',round:'supply-test',rules:{target:10,duration:180},players:{host:{name:'P1',character:'male'},guest:{name:'P2',character:'female'}}};
+const g=fixture();g.network={connected:true,isHost:true,localId:'host',send(){},broadcast(){},command:()=>Promise.resolve()};await g.start({mode:'versus'});const duel=new OnlineDuel(g,room);
+const ammo=duel.supplies.nodes.find(n=>n.kind==='ammo');
+for(const player of Object.values(duel.players)){player.p=ammo.mesh.position.clone().setY(0).toArray();player.inventory.forEach(i=>{i.reserve=0;});}
+const claims=[];duel.supplies.authoritative(0,duel.players,(node,player)=>claims.push([node.id,player.id]));
+assert.equal(claims.filter(([id])=>id===ammo.id).length,1,'one station cannot be claimed twice');
+assert.equal(duel.players.host.inventory[0].reserve,WEAPONS[0].mag*2);assert.equal(duel.players.guest.inventory[0].reserve,0);
+ammo.cooldown=0;duel.players.guest.p=g.world.playerSpawn.toArray();act(duel,'guest',{action:'pickup',pickupId:ammo.id});assert.equal(ammo.cooldown,0,'remote pickup forbidden');
+duel.players.guest.p=ammo.mesh.position.clone().setY(0).toArray();duel.players.guest.hp=0;act(duel,'guest',{action:'pickup',pickupId:ammo.id});assert.equal(ammo.cooldown,0,'dead player cannot pick up');
+duel.players.guest.hp=120;act(duel,'guest',{action:'pickup',pickupId:ammo.id});assert.ok(ammo.cooldown>0);assert.equal(duel.players.guest.inventory[0].reserve,WEAPONS[0].mag*2);
+const guest=fixture();guest.network={connected:true,isHost:false,localId:'guest',send(){},broadcast(){}};await guest.start({mode:'versus'});const remote=new OnlineDuel(guest,room);
+remote.consume({type:'pvp-state',seq:1,remaining:150,players:Object.values(duel.players),supplies:duel.supplies.snapshot()},'host');
+assert.equal(remote.supplies.nodes.find(n=>n.id===ammo.id).cooldown,24);assert.equal(remote.players.guest.inventory[0].reserve,WEAPONS[0].mag*2);
+const before=guest.inventory[0].reserve;guest.collect(remote.supplies.nodes[0]);assert.equal(guest.inventory[0].reserve,before,'guest cannot collect locally');
+for(const player of Object.values(duel.players))player.p=g.world.playerSpawn.toArray();duel.supplies.authoritative(24.01,duel.players,()=>{});assert.equal(ammo.cooldown,0,'shared cooldown respawns station');
+g.clearBattle();g.world.dispose();guest.clearBattle();guest.world.dispose();
+console.log(JSON.stringify({maps:reports,authoritativePickup:'passed',duplicateClaims:'blocked',distanceAndDeath:'checked',guestReplication:'passed',cooldown:'passed'},null,2));

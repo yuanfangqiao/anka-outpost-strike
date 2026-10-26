@@ -1,0 +1,43 @@
+{
+  "generator": "Blender 5.2 / MCP for Blender 2.2.4",
+  "units": "metres",
+  "up": "+Y",
+  "forward": "+Z",
+  "origin": "feet",
+  "characters": [
+    {
+      "id": "male_scout",
+      "file": "assets/characters/male_scout.glb",
+      "bytes": 1533860,
+      "triangles": 20672,
+      "vertices": 10644,
+      "bones": 20,
+      "materials": 4,
+      "animations": [
+        "Idle",
+        "Run",
+        "Shoot",
+        "Jump",
+        "Victory"
+      ],
+      "height_m": 2.031
+    },
+    {
+      "id": "female_striker",
+      "file": "assets/characters/female_striker.glb",
+      "bytes": 1574556,
+      "triangles": 21808,
+      "vertices": 11234,
+      "bones": 20,
+      "materials": 4,
+      "animations": [
+        "Idle",
+        "Run",
+        "Shoot",
+        "Jump",
+        "Victory"
+      ],
+      "height_m": 2.018
+    }
+  ]
+}

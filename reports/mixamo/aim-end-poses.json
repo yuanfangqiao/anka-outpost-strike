@@ -1,0 +1,318 @@
+{
+  "male": {
+    "bone_prefix": "mixamorig:",
+    "coordinate_note": "positions use final GLB +Y up/+Z forward; quaternion is Blender world wxyz and needs axis conversion if consumed directly",
+    "AimRaise_duration": 0.8666666666666667,
+    "aim_end_positions": {
+      "hips": {
+        "position_gltf_world": [
+          0.0040577,
+          0.8223421,
+          0.0530177
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3712528,
+          0.2180155,
+          -0.6911619,
+          -0.5804617
+        ]
+      },
+      "spine": {
+        "position_gltf_world": [
+          0.0091144,
+          0.8599574,
+          0.044004
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3904589,
+          0.307728,
+          -0.6471412,
+          -0.5779739
+        ]
+      },
+      "head": {
+        "position_gltf_world": [
+          -0.0939821,
+          1.3436347,
+          0.1393193
+        ],
+        "rotation_blender_world_wxyz": [
+          0.2107871,
+          0.5317847,
+          -0.5448591,
+          -0.6131089
+        ]
+      },
+      "leftarm": {
+        "position_gltf_world": [
+          0.1197537,
+          1.1037766,
+          0.2249812
+        ],
+        "rotation_blender_world_wxyz": [
+          0.0365488,
+          -0.4584119,
+          0.2410935,
+          -0.8546324
+        ]
+      },
+      "leftforearm": {
+        "position_gltf_world": [
+          0.085693,
+          1.0080611,
+          0.4142368
+        ],
+        "rotation_blender_world_wxyz": [
+          0.4170342,
+          0.5152926,
+          0.0629071,
+          0.7460554
+        ]
+      },
+      "lefthand": {
+        "position_gltf_world": [
+          -0.0170595,
+          1.1045873,
+          0.5329929
+        ],
+        "rotation_blender_world_wxyz": [
+          0.0300641,
+          0.9125988,
+          -0.4025199,
+          0.065095
+        ]
+      },
+      "rightarm": {
+        "position_gltf_world": [
+          -0.1857837,
+          1.10581,
+          -0.078244
+        ],
+        "rotation_blender_world_wxyz": [
+          0.275014,
+          -0.8563241,
+          0.4003666,
+          -0.1754508
+        ]
+      },
+      "rightforearm": {
+        "position_gltf_world": [
+          -0.3133389,
+          0.973426,
+          0.0360967
+        ],
+        "rotation_blender_world_wxyz": [
+          0.142443,
+          0.8762972,
+          0.3138776,
+          0.3365917
+        ]
+      },
+      "righthand": {
+        "position_gltf_world": [
+          -0.231503,
+          1.0564753,
+          0.173457
+        ],
+        "rotation_blender_world_wxyz": [
+          0.005289,
+          -0.6757193,
+          -0.0332848,
+          -0.7363882
+        ]
+      },
+      "leftfoot": {
+        "position_gltf_world": [
+          0.1237337,
+          0.1584701,
+          0.3397951
+        ],
+        "rotation_blender_world_wxyz": [
+          0.1659571,
+          -0.2958175,
+          0.2123856,
+          -0.9164293
+        ]
+      },
+      "rightfoot": {
+        "position_gltf_world": [
+          -0.105585,
+          0.129105,
+          -0.0504668
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3496805,
+          0.1147198,
+          -0.3495746,
+          0.8616036
+        ]
+      }
+    },
+    "approx_grip_line_forward": [
+      0.5088994138522118,
+      0.11417538232335131,
+      0.853220586162917
+    ],
+    "wrist_separation_m": 0.4213868087933698,
+    "suggested_loop": "AimIdle",
+    "suggested_fire": "Shoot"
+  },
+  "female": {
+    "bone_prefix": "mixamorig:",
+    "coordinate_note": "positions use final GLB +Y up/+Z forward; quaternion is Blender world wxyz and needs axis conversion if consumed directly",
+    "AimRaise_duration": 0.8666666666666667,
+    "aim_end_positions": {
+      "hips": {
+        "position_gltf_world": [
+          -0.0421345,
+          0.8625875,
+          0.1939107
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3755749,
+          0.2104812,
+          -0.7027318,
+          -0.5664003
+        ]
+      },
+      "spine": {
+        "position_gltf_world": [
+          -0.0359196,
+          0.9467285,
+          0.1763863
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3409082,
+          0.2521814,
+          -0.6891361,
+          -0.5876032
+        ]
+      },
+      "head": {
+        "position_gltf_world": [
+          -0.1240654,
+          1.3414066,
+          0.2420934
+        ],
+        "rotation_blender_world_wxyz": [
+          0.1934438,
+          0.4967799,
+          -0.5674582,
+          -0.6275194
+        ]
+      },
+      "leftarm": {
+        "position_gltf_world": [
+          0.0302824,
+          1.1900152,
+          0.2955008
+        ],
+        "rotation_blender_world_wxyz": [
+          0.0227911,
+          -0.4416957,
+          0.2243063,
+          -0.8683734
+        ]
+      },
+      "leftforearm": {
+        "position_gltf_world": [
+          0.000336,
+          1.1126419,
+          0.4651558
+        ],
+        "rotation_blender_world_wxyz": [
+          0.4256631,
+          0.4914575,
+          0.0866587,
+          0.7548316
+        ]
+      },
+      "lefthand": {
+        "position_gltf_world": [
+          -0.1085286,
+          1.2199024,
+          0.5867487
+        ],
+        "rotation_blender_world_wxyz": [
+          0.0543412,
+          0.9106361,
+          -0.4003713,
+          0.0865554
+        ]
+      },
+      "rightarm": {
+        "position_gltf_world": [
+          -0.1780751,
+          1.1835175,
+          0.0935984
+        ],
+        "rotation_blender_world_wxyz": [
+          0.1739417,
+          -0.8082396,
+          0.4399451,
+          -0.35063
+        ]
+      },
+      "rightforearm": {
+        "position_gltf_world": [
+          -0.289346,
+          1.0721513,
+          0.1979195
+        ],
+        "rotation_blender_world_wxyz": [
+          0.0950518,
+          0.7928808,
+          0.3455165,
+          0.4928727
+        ]
+      },
+      "righthand": {
+        "position_gltf_world": [
+          -0.2044784,
+          1.1639531,
+          0.3367779
+        ],
+        "rotation_blender_world_wxyz": [
+          0.001073,
+          0.5584532,
+          0.04884,
+          0.8280963
+        ]
+      },
+      "leftfoot": {
+        "position_gltf_world": [
+          0.0926189,
+          0.1842498,
+          0.4977204
+        ],
+        "rotation_blender_world_wxyz": [
+          0.1604924,
+          -0.3016554,
+          0.1934103,
+          -0.9196949
+        ]
+      },
+      "rightfoot": {
+        "position_gltf_world": [
+          -0.1374972,
+          0.1433778,
+          0.1090209
+        ],
+        "rotation_blender_world_wxyz": [
+          0.3520354,
+          0.1073491,
+          -0.3320027,
+          0.8685169
+        ]
+      }
+    },
+    "approx_grip_line_forward": [
+      0.35077542438561726,
+      0.20454070202937588,
+      0.9138488402686848
+    ],
+    "wrist_separation_m": 0.2735362665958026,
+    "suggested_loop": "AimIdle",
+    "suggested_fire": "Shoot"
+  }
+}

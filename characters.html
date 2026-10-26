@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ANKA · Character Lab</title>
+    <link rel="stylesheet" href="/demo/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-icon">A<span></span></span> ANKA <i>/</i> <span class="brand-sub">CHARACTER LAB</span></a>
+      <div class="top-meta"><span class="live-dot"></span> THREE.JS LIVE PREVIEW <span class="version">VOL. 01</span></div>
+    </header>
+    <main>
+      <aside class="sidebar">
+        <div class="eyebrow">CHARACTER COLLECTION / 001—002</div>
+        <h1>小队集结<span>READY TO PLAY.</span></h1>
+        <p class="intro">为下一场冒险做好准备。<br />两位搭档，一起出发。</p>
+        <div class="section-label">选择角色 <span>SELECT YOUR SQUAD</span></div>
+        <div class="character-list">
+          <button class="character-card is-active" data-character="duo"><span class="card-number">00</span><span class="card-copy"><strong>双人小队</strong><small>THE DUO</small></span><span class="card-mark">↗</span></button>
+          <button class="character-card" data-character="male"><span class="card-swatch scout"></span><span class="card-copy"><strong>小杰 <em>SCOUT</em></strong><small>先锋侦察员 / RED SQUAD</small></span><span class="card-mark">↗</span></button>
+          <button class="character-card" data-character="female"><span class="card-swatch striker"></span><span class="card-copy"><strong>小葵 <em>STRIKER</em></strong><small>机动突击手 / PINK SQUAD</small></span><span class="card-mark">↗</span></button>
+        </div>
+        <div class="technical">
+          <div class="section-label">资产规格 <span>GAME ASSETS</span></div>
+          <dl><div><dt>格式</dt><dd>glTF 2.0 <span>/ GLB</span></dd></div><div><dt>骨骼</dt><dd><b id="bone-count">—</b> <span>per character</span></dd></div><div><dt>动画</dt><dd>16 <span>in-place clips</span></dd></div><div><dt>材质</dt><dd><b id="material-count">—</b> <span>PBR · 2K textures</span></dd></div></dl>
+          <a class="source-link" href="/source/anka_tripo_characters.blend" download>↓ 下载 Blender 源文件 <span>.blend</span></a>
+        </div>
+        <div class="aside-footer"><span>TRIPO CN · MIXAMO SKELETON</span><small>ANKA ASSET STUDIO · 2026</small></div>
+      </aside>
+      <section class="viewport" aria-label="3D 角色预览">
+        <div id="scene"></div>
+        <div class="viewport-top"><span><i class="live-dot"></i> <b id="load-status">正在加载角色…</b></span><span class="drag-hint">拖动旋转 · 滚轮缩放</span></div>
+        <div class="view-tools" aria-label="视角控制"><button data-view="three-quarter" class="is-active" title="三分之四视角">3/4</button><button data-view="front" title="正面">正</button><button data-view="back" title="背面">背</button><span></span><button id="wireframe" title="线框显示">◇</button><button id="auto-rotate" title="自动旋转">↻</button></div>
+        <div class="loading" id="loading"><span></span><p>ASSEMBLING YOUR SQUAD</p></div>
+        <div class="nameplate male-name"><span class="role-line"></span><small>01 / SCOUT</small><strong>小杰</strong><span>勇敢 · 可靠 · 一往无前</span></div>
+        <div class="nameplate female-name"><span class="role-line pink-line"></span><small>02 / STRIKER</small><strong>小葵</strong><span>灵巧 · 果断 · 活力满格</span></div>
+        <div class="animation-dock">
+          <div class="dock-title"><span class="live-dot"></span> 动作预览 <small>ANIMATION</small></div>
+          <div class="clip-list"><button data-clip="Idle" class="is-active"><span>◉</span>待机<small>IDLE</small></button><button data-clip="Walk"><span>→</span>走路<small>WALK</small></button><button data-clip="Run"><span>↗</span>跑步<small>RUN</small></button><button data-clip="Jump"><span>↑</span>跳跃<small>JUMP</small></button><button data-clip="Shoot"><span>⊕</span>射击<small>SHOOT</small></button></div>
+          <select id="extra-clips" aria-label="更多角色动作"><option value="">更多动作</option><option value="AimRaise">举枪瞄准 · Mixamo</option><option value="AimLower">收枪 · Mixamo</option><option value="AimIdle">持枪待机</option><option value="CrouchIdle">蹲伏</option><option value="CrouchWalk">蹲行</option><option value="Roll">翻滚</option><option value="Reload">换弹</option><option value="Hurt">受击</option><option value="Death">倒地</option><option value="Victory">胜利</option><option value="TripoShoot">原 Tripo 射击</option></select><button id="pause" title="暂停动画">Ⅱ</button>
+        </div>
+        <div class="viewport-footer"><span id="render-stats">GLB · SKINNED MESH · PBR</span><span>Y UP <i>·</i> +Z FRONT <i>·</i> METRES</span></div>
+      </section>
+    </main>
+    <script type="module" src="/demo/main.js"></script>
+  </body>
+</html>

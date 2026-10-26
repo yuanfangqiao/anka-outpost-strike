@@ -1,0 +1,57 @@
+{
+  "region": "cn",
+  "starting_balance": 600,
+  "tasks": [
+    {
+      "character": "男角色",
+      "task_id": "4bae3f9e-0973-4c95-aa13-a39146d3fb69",
+      "type": "multiview_to_model",
+      "credits_consumed": 50
+    },
+    {
+      "character": "男角色",
+      "task_id": "65aa9414-fca1-4fe7-be11-6bfad24421e2",
+      "type": "animate_prerigcheck",
+      "credits_consumed": 0
+    },
+    {
+      "character": "男角色",
+      "task_id": "2195e545-1126-436d-b11f-e08ccc6d99dc",
+      "type": "animate_rig",
+      "credits_consumed": 25
+    },
+    {
+      "character": "男角色",
+      "task_id": "4823e78e-b980-4905-b7f6-0b779c61f95a",
+      "type": "animate_retarget",
+      "credits_consumed": 50
+    },
+    {
+      "character": "女角色",
+      "task_id": "23e75148-a4f3-485c-8c1b-265ffc3fce88",
+      "type": "multiview_to_model",
+      "credits_consumed": 50
+    },
+    {
+      "character": "女角色",
+      "task_id": "6d8cef87-a2c6-4c2c-b2bd-5e943332b288",
+      "type": "animate_prerigcheck",
+      "credits_consumed": 0
+    },
+    {
+      "character": "女角色",
+      "task_id": "24233d34-d35e-4d81-8db9-671a360c87e6",
+      "type": "animate_rig",
+      "credits_consumed": 25
+    },
+    {
+      "character": "女角色",
+      "task_id": "ed51dbc6-cf40-4f05-930c-cc520fc0e83d",
+      "type": "animate_retarget",
+      "credits_consumed": 50
+    }
+  ],
+  "total_credits_consumed": 250,
+  "remaining_balance": 350,
+  "frozen": 0
+}

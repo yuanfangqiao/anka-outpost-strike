@@ -1,0 +1,242 @@
+{
+  "status": "blocked_pending_explicit_upload_authorization",
+  "site_id": "appgprj_6adda19b31e08191b1d134c57ed1ed3d",
+  "destination": "https://anka-frontline-desert-1025.sugarypuppy133.chatgpt.site",
+  "audience": "owner-private",
+  "runtime_assets": "Four GLB files: two final models and two fallback models",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 485
+    },
+    {
+      "path": "vite.config.js",
+      "bytes": 339
+    },
+    {
+      "path": "README.md",
+      "bytes": 200
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 47
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 47971
+    },
+    {
+      "path": "package.json",
+      "bytes": 676
+    },
+    {
+      "path": "characters.html",
+      "bytes": 5063
+    },
+    {
+      "path": "demo/main.js",
+      "bytes": 8111
+    },
+    {
+      "path": "demo/characters.js",
+      "bytes": 2211
+    },
+    {
+      "path": "demo/style.css",
+      "bytes": 9392
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 661
+    },
+    {
+      "path": "dist/characters.html",
+      "bytes": 5199
+    },
+    {
+      "path": "game/App.vue",
+      "bytes": 5636
+    },
+    {
+      "path": "game/world-notes.md",
+      "bytes": 2085
+    },
+    {
+      "path": "game/network-notes.md",
+      "bytes": 6635
+    },
+    {
+      "path": "game/world.js",
+      "bytes": 27648
+    },
+    {
+      "path": "game/effects.js",
+      "bytes": 23385
+    },
+    {
+      "path": "game/effects-notes.md",
+      "bytes": 2736
+    },
+    {
+      "path": "game/config.js",
+      "bytes": 3175
+    },
+    {
+      "path": "game/main.js",
+      "bytes": 92
+    },
+    {
+      "path": "game/actor.js",
+      "bytes": 8377
+    },
+    {
+      "path": "game/GameUI.vue",
+      "bytes": 88122
+    },
+    {
+      "path": "game/assets-notes.md",
+      "bytes": 3332
+    },
+    {
+      "path": "game/engine.js",
+      "bytes": 43931
+    },
+    {
+      "path": "game/network.js",
+      "bytes": 21426
+    },
+    {
+      "path": "game/assets.js",
+      "bytes": 26151
+    },
+    {
+      "path": "scripts/mixamo-retarget.py",
+      "bytes": 22453
+    },
+    {
+      "path": "scripts/build_characters.py",
+      "bytes": 33306
+    },
+    {
+      "path": "scripts/render_characters.py",
+      "bytes": 788
+    },
+    {
+      "path": "scripts/check-tripo-motion.mjs",
+      "bytes": 4024
+    },
+    {
+      "path": "scripts/build_tripo_review_scene.py",
+      "bytes": 3903
+    },
+    {
+      "path": "scripts/start_blender_mcp.py",
+      "bytes": 411
+    },
+    {
+      "path": "scripts/validate-glb.mjs",
+      "bytes": 1466
+    },
+    {
+      "path": "scripts/save-game-blend.py",
+      "bytes": 1187
+    },
+    {
+      "path": "scripts/repair_glb_tangents.py",
+      "bytes": 2321
+    },
+    {
+      "path": "scripts/mcp_client.py",
+      "bytes": 1792
+    },
+    {
+      "path": "scripts/inspect_animation_skeleton.py",
+      "bytes": 3503
+    },
+    {
+      "path": "scripts/verify-game.mjs",
+      "bytes": 5535
+    },
+    {
+      "path": "scripts/procedural-character-actions.py",
+      "bytes": 20174
+    },
+    {
+      "path": "scripts/validate-tripo-glb.mjs",
+      "bytes": 2655
+    },
+    {
+      "path": "scripts/finalize_tripo_character.py",
+      "bytes": 7750
+    },
+    {
+      "path": "scripts/render_tripo_review.py",
+      "bytes": 3150
+    },
+    {
+      "path": ".openai/hosting.json",
+      "bytes": 106
+    },
+    {
+      "path": "reports/mixamo/validate_new_aim.mjs",
+      "bytes": 4340
+    },
+    {
+      "path": "assets/characters/mixamo/male_scout_aim.glb",
+      "bytes": 7973144
+    },
+    {
+      "path": "assets/characters/mixamo/female_striker_aim.glb",
+      "bytes": 8201192
+    },
+    {
+      "path": "assets/characters/tripo/female_striker_animated.glb",
+      "bytes": 7639332
+    },
+    {
+      "path": "assets/characters/tripo/male_scout_animated.glb",
+      "bytes": 7415048
+    },
+    {
+      "path": "dist/assets/game-C05geO9g.js",
+      "bytes": 218348
+    },
+    {
+      "path": "dist/assets/female_striker_animated-DqbYo9sB.glb",
+      "bytes": 7639332
+    },
+    {
+      "path": "dist/assets/characters--BIKozLB.css",
+      "bytes": 9383
+    },
+    {
+      "path": "dist/assets/GLTFLoader-BFvRpcAw.js",
+      "bytes": 648016
+    },
+    {
+      "path": "dist/assets/game-Cc535Hj2.css",
+      "bytes": 72327
+    },
+    {
+      "path": "dist/assets/male_scout_animated-Be0Qz787.glb",
+      "bytes": 7415048
+    },
+    {
+      "path": "dist/assets/female_striker_aim-CfspR4vR.glb",
+      "bytes": 8201192
+    },
+    {
+      "path": "dist/assets/characters-C6R5jBX9.js",
+      "bytes": 26682
+    },
+    {
+      "path": "dist/assets/bundler-Bw4DLPZK.js",
+      "bytes": 117134
+    },
+    {
+      "path": "dist/assets/male_scout_aim-CktXnNxL.glb",
+      "bytes": 7973144
+    }
+  ],
+  "total_bytes": 64011272
+}

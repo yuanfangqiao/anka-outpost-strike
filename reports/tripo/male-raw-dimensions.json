@@ -1,0 +1,19 @@
+{
+  "file": "/Users/vitcou/workplace/anka-3d-game/anka-outpost-strike/assets/characters/tripo/raw/male-generation/model.glb",
+  "raw_blender_bounds": {
+    "min": [
+      -0.1868884563446045,
+      -0.2592954933643341,
+      -0.5
+    ],
+    "max": [
+      0.18493151664733887,
+      0.2592955231666565,
+      0.4980430603027344
+    ]
+  },
+  "review_scale": 2.0039215536385213,
+  "rotation_deg": 0,
+  "meshes": 1,
+  "armatures": 0
+}

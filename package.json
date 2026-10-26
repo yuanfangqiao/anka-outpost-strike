@@ -1,0 +1,29 @@
+{
+  "name": "anka-desert-strike",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "node scripts/build-game.mjs",
+    "validate": "node scripts/validate-tripo-glb.mjs",
+    "validate:prototype": "node scripts/validate-glb.mjs",
+    "validate:motion": "node scripts/check-tripo-motion.mjs",
+    "test:game": "node scripts/verify-game.mjs",
+    "validate:aim": "node reports/mixamo/validate_new_aim.mjs",
+    "test:duel": "node scripts/verify-duel.mjs",
+    "test:online": "node scripts/verify-online.mjs",
+    "test:fps": "node scripts/verify-fps-supplies.mjs",
+    "test:duel:ui": "node scripts/verify-duel-ui.mjs",
+    "test:ai": "node scripts/verify-behavior-tree.mjs"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "three": "0.186.1",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "gltf-validator": "2.0.0-dev.3.10",
+    "vite": "^7.0.0"
+  }
+}

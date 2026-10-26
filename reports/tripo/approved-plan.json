@@ -1,0 +1,73 @@
+{
+  "status": "complete",
+  "region": "cn",
+  "starting_balance": 600,
+  "estimated_total_credits": 250,
+  "user_approved": true,
+  "model_alias": "tripo-v3.1",
+  "model_wire": "v3.1-20260211",
+  "rig_alias": "rig-v3.0",
+  "rig_wire": "v3.0-20260909",
+  "generation_parameters": {
+    "face_limit": 20000,
+    "smart_low_poly": true,
+    "texture": true,
+    "pbr": true,
+    "texture_quality": "detailed"
+  },
+  "rig_parameters": {
+    "rig_type": "biped",
+    "spec": "mixamo",
+    "out_format": "glb"
+  },
+  "animation_parameters": {
+    "animations": [
+      "preset:idle",
+      "preset:walk",
+      "preset:run",
+      "preset:jump",
+      "preset:shoot"
+    ],
+    "animate_in_place": true,
+    "out_format": "glb"
+  },
+  "characters": [
+    {
+      "id": "male_scout",
+      "input_images": [
+        "references/tripo/male/front.png",
+        "references/tripo/male/right.png",
+        "references/tripo/male/back.png"
+      ]
+    },
+    {
+      "id": "female_striker",
+      "input_images": [
+        "references/tripo/female/front.png",
+        "references/tripo/female/left.png",
+        "references/tripo/female/back.png"
+      ]
+    }
+  ],
+  "estimated_steps_per_character": [
+    {
+      "type": "multiview_to_model",
+      "credits": 50
+    },
+    {
+      "type": "rig_check",
+      "credits": 0
+    },
+    {
+      "type": "animate_rig",
+      "credits": 25
+    },
+    {
+      "type": "animate_retarget",
+      "credits": 50
+    }
+  ],
+  "output_directory": "assets/characters/tripo",
+  "actual_credits": 250,
+  "remaining_balance": 350
+}

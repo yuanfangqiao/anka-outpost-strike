@@ -1,0 +1,19 @@
+{
+  "file": "/Users/vitcou/workplace/anka-3d-game/anka-outpost-strike/assets/characters/tripo/male_scout_animated.glb",
+  "raw_blender_bounds": {
+    "min": [
+      -0.16534753143787384,
+      -0.40548044443130493,
+      -0.034422971308231354
+    ],
+    "max": [
+      0.5789523720741272,
+      0.3670976459980011,
+      1.9937026500701904
+    ]
+  },
+  "review_scale": 0.9861322094243323,
+  "rotation_deg": 0,
+  "meshes": 1,
+  "armatures": 1
+}

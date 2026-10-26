@@ -1,0 +1,44 @@
+[
+  {
+    "map": "desert",
+    "navigableRoutes": 8,
+    "movement": "passed",
+    "pause": "passed",
+    "noRobotWaves": "passed"
+  },
+  {
+    "map": "jungle",
+    "navigableRoutes": 8,
+    "movement": "passed",
+    "pause": "passed",
+    "noRobotWaves": "passed"
+  },
+  {
+    "map": "snow",
+    "navigableRoutes": 8,
+    "movement": "passed",
+    "pause": "passed",
+    "noRobotWaves": "passed"
+  },
+  {
+    "map": "city",
+    "navigableRoutes": 8,
+    "movement": "passed",
+    "pause": "passed",
+    "noRobotWaves": "passed"
+  },
+  {
+    "humanHitscan": "passed",
+    "splash": "passed",
+    "spawnProtection": "passed",
+    "firstToTen": "passed",
+    "botShooting": "passed",
+    "botReload": "passed",
+    "respawn": "passed",
+    "deadAbilitiesBlocked": "passed",
+    "wallsBlockFire": "passed",
+    "timeLimitDraw": "passed",
+    "retryCleanup": "passed",
+    "observedShots": 29
+  }
+]

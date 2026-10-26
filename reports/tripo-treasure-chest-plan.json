@@ -1,0 +1,24 @@
+{
+  "region_required": "cn",
+  "cli": "tripo-cli@0.7.3 (invoked via npx tripo-cli@latest)",
+  "input": "A stylized low-poly treasure chest for a colorful chibi adventure game. One closed wooden chest with a gently arched lid, warm oak planks, chunky dark iron bands, brass corner guards, a centered gold lock plate and side carrying handles. Clean readable silhouette, hand-painted wood-grain textures and PBR metal details, simple solid construction, flat base, no pedestal, no ground, no surrounding scene, no text or logos.",
+  "model_alias": "tripo-p1",
+  "model_wire": "P1-20260311",
+  "steps": [
+    {
+      "endpoint": "POST /v3/generation/text-to-model",
+      "parameters": {
+        "face_limit": 3000,
+        "texture": true,
+        "pbr": true,
+        "texture_quality": "standard"
+      },
+      "estimated_credits": 40
+    }
+  ],
+  "total_estimated_credits": 40,
+  "destination": "assets/treasure-chest.glb",
+  "source_artifacts": "assets/tripo-out/low-poly-treasure-chest-<id8>/",
+  "status": "cn_login_verified; generation_declined_by_user",
+  "generation_authorized": false
+}

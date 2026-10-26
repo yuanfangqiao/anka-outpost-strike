@@ -1,0 +1,48 @@
+{
+  "id": "female_striker",
+  "source": "assets/characters/tripo/tripo-out/female-striker-animations-ed51dbc6/model.glb",
+  "file": "assets/characters/tripo/female_striker_animated.glb",
+  "blend": "source/anka_tripo_female_striker.blend",
+  "raw_triangles": 25273,
+  "triangles": 19800,
+  "bytes": 7639332,
+  "bones": 65,
+  "height_m": 2.0,
+  "blender_turn_z_deg": -90.0,
+  "clips": [
+    "Idle",
+    "Jump",
+    "Run",
+    "Shoot",
+    "Walk"
+  ],
+  "web_texture_sizes": [
+    {
+      "name": "Color_23e75148-a4f3-485c-8c1b-265ffc3fce88",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "NormalGL_23e75148-a4f3-485c-8c1b-265ffc3fce88",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "ORM_23e75148-a4f3-485c-8c1b-265ffc3fce88",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "Viewer Node",
+      "width": 256,
+      "height": 256
+    }
+  ],
+  "local_changes": [
+    "Decimate to <20k triangles with skin weights and UVs",
+    "Normalize to 2m, +Y up / +Z forward, feet origin",
+    "Roughness 0.58 with source base/normal/metal maps",
+    "Stable animation clip names",
+    "2K web textures; high-resolution textures kept in source blend"
+  ]
+}

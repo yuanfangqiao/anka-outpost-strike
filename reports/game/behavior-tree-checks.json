@@ -1,0 +1,48 @@
+{
+  "core": {
+    "reactivePriority": true,
+    "abortCleanup": true,
+    "memorySequence": true,
+    "statusContract": true
+  },
+  "tactics": [
+    {
+      "scenario": "cover-hide-peek-fire-reposition",
+      "states": [
+        "cover",
+        "hide",
+        "peek",
+        "reposition",
+        "search",
+        "attack"
+      ],
+      "peekShots": 8
+    },
+    {
+      "scenario": "suppress-flank-fire",
+      "states": [
+        "suppress",
+        "flank",
+        "attack",
+        "search"
+      ],
+      "shots": [
+        "suppress",
+        "suppress",
+        "attack"
+      ]
+    },
+    {
+      "scenario": "damage-and-reload-preemption",
+      "passed": true
+    },
+    {
+      "scenario": "field-of-view-memory-and-hearing",
+      "passed": true
+    },
+    {
+      "scenario": "movement-timeout-releases-plan",
+      "passed": true
+    }
+  ]
+}

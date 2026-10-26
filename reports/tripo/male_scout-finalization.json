@@ -1,0 +1,48 @@
+{
+  "id": "male_scout",
+  "source": "assets/characters/tripo/tripo-out/male-scout-animations-4823e78e/model.glb",
+  "file": "assets/characters/tripo/male_scout_animated.glb",
+  "blend": "source/anka_tripo_male_scout.blend",
+  "raw_triangles": 27654,
+  "triangles": 19800,
+  "bytes": 7415048,
+  "bones": 65,
+  "height_m": 2.0,
+  "blender_turn_z_deg": -90.0,
+  "clips": [
+    "Idle",
+    "Jump",
+    "Run",
+    "Shoot",
+    "Walk"
+  ],
+  "web_texture_sizes": [
+    {
+      "name": "Color_4bae3f9e-0973-4c95-aa13-a39146d3fb69",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "NormalGL_4bae3f9e-0973-4c95-aa13-a39146d3fb69",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "ORM_4bae3f9e-0973-4c95-aa13-a39146d3fb69",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "Viewer Node",
+      "width": 256,
+      "height": 256
+    }
+  ],
+  "local_changes": [
+    "Decimate to <20k triangles with skin weights and UVs",
+    "Normalize to 2m, +Y up / +Z forward, feet origin",
+    "Roughness 0.58 with source base/normal/metal maps",
+    "Stable animation clip names",
+    "2K web textures; high-resolution textures kept in source blend"
+  ]
+}

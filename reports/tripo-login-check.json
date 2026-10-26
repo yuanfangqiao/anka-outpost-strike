@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-25T11:51:54.806426+08:00",
+  "logged_in": true,
+  "profile": "default",
+  "region": "cn",
+  "api_base_url": "https://openapi.tripo3d.com",
+  "api_reachable": true,
+  "doctor_ok": true,
+  "credentials_stored_by": "Tripo CLI",
+  "credential_file_permissions": "0600",
+  "balance": 0,
+  "frozen": 0,
+  "paid_tasks_submitted": false,
+  "generation_authorized": false
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "map": "desert",
+    "mission": "passed",
+    "kills": 25,
+    "enemies": [
+      "walker",
+      "drone",
+      "bomber",
+      "shield",
+      "elite",
+      "sniper",
+      "boss"
+    ]
+  },
+  {
+    "map": "jungle",
+    "mission": "passed",
+    "kills": 25,
+    "enemies": [
+      "walker",
+      "drone",
+      "bomber",
+      "shield",
+      "elite",
+      "sniper",
+      "boss"
+    ]
+  },
+  {
+    "map": "snow",
+    "mission": "passed",
+    "kills": 25,
+    "enemies": [
+      "walker",
+      "drone",
+      "bomber",
+      "shield",
+      "elite",
+      "sniper",
+      "boss"
+    ]
+  },
+  {
+    "map": "city",
+    "mission": "passed",
+    "kills": 25,
+    "enemies": [
+      "walker",
+      "drone",
+      "bomber",
+      "shield",
+      "elite",
+      "sniper",
+      "boss"
+    ]
+  },
+  {
+    "weapons": 7,
+    "magazineReload": "passed",
+    "shieldDamageHealing": "passed",
+    "jumpRoll": "passed",
+    "survivalBoss": "passed",
+    "defeat": "passed"
+  },
+  {
+    "pvpScoring": "passed",
+    "coopRevive": "passed",
+    "roundRestart": "passed",
+    "guestScoreSnapshot": "passed"
+  }
+]
