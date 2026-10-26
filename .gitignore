@@ -1,0 +1,60 @@
+# ===== 依赖 =====
+node_modules/
+.pnp.*
+.yarn/cache/
+.yarn/install-state.gz
+
+# ===== 构建产物 =====
+dist/
+sites/*/dist/
+.dist-stage-*/
+.dist-previous/
+.vite/
+*.tsbuildinfo
+
+# ===== Python / 虚拟环境 =====
+.tools/
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ===== Blender 备份与临时文件 =====
+*.blend1
+*.blend2
+*.blend@
+*.blendbackup
+
+# ===== 可重新生成的中间产物 =====
+output/
+renders/
+.tripo/
+reports/mixamo/**/*.blend
+reports/mixamo/**/*.blend1
+reports/mixamo/**/*.glb
+*.log
+logs/
+
+# ===== 环境变量与凭据 =====
+.env
+.env.*
+!.env.example
+*.pem
+
+# ===== 编辑器 / 系统 =====
+.DS_Store
+._*
+.AppleDouble
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# ===== 测试临时产物 =====
+coverage/
+test-results/
+playwright-report/
