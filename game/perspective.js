@@ -28,7 +28,10 @@ export class Perspective{
   this.scene=new THREE.Scene();this.scene.add(this.rig);this.camera=new THREE.PerspectiveCamera(70,game.camera.aspect,.02,10);
   this.scene.add(new THREE.HemisphereLight(0xe6f3ff,0x8e735e,2.5));
   const light=new THREE.DirectionalLight(0xffefd8,3);light.position.set(-2,3,2);this.scene.add(light);
-  this.weaponId='';this.kick=0;this.ownedGeometries=[];this.ownedMaterials=[];
+  this.weaponId='';this.kick=0;this.flashTime=0;this.ownedGeometries=[];this.ownedMaterials=[];
+  const flashGeometry=new THREE.ConeGeometry(.065,.24,6),flashMaterial=new THREE.MeshBasicMaterial({color:0xffdd97,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false});
+  this.ownedGeometries.push(flashGeometry);this.ownedMaterials.push(flashMaterial);
+  this.flash=new THREE.Mesh(flashGeometry,flashMaterial);this.flash.rotation.x=-Math.PI/2;this.flash.renderOrder=1003;this.flash.visible=false;this.rig.add(this.flash);
   const sleeve=new THREE.MeshStandardMaterial({color:0x344e5b,roughness:.9});
   const glove=new THREE.MeshStandardMaterial({color:0x182d36,roughness:.8});
   this.ownedMaterials.push(sleeve,glove);
@@ -46,7 +49,7 @@ export class Perspective{
   const g=this.game,active=g.state.perspective==='first'&&['playing','paused'].includes(g.state.phase);
   if(g.state.phase==='menu'&&g.camera.fov!==58){g.camera.fov=58;g.camera.updateProjectionMatrix();}
   if(g.player)g.player.group.visible=!active;
-  this.rig.visible=active&&g.state.hp>0;if(!this.rig.visible)return;
+  this.rig.visible=active&&g.state.hp>0;if(!this.rig.visible){this.flashTime=0;this.flash.visible=false;return;}
   if(this.weaponId!==WEAPONS[g.state.weapon].id){
    this.weapon?.removeFromParent();this.weaponMaterials?.forEach(m=>m.dispose());
    this.weaponId=WEAPONS[g.state.weapon].id;this.weapon=createWeapon(this.weaponId);this.weaponMaterials=[];
@@ -57,13 +60,28 @@ export class Perspective{
   this.weapon.position.set(ads?.06:.25,-.30,-.43+this.kick);
   const reload=g.state.reloading>0?Math.sin(g.state.reloading*Math.PI)*.16:0;
   this.rig.position.set((g.camera.aspect<1?-.07:0)+(g.moving?Math.sin(g.now*9)*.007:0),-reload+(g.moving?Math.cos(g.now*18)*.005:0),0);
+  this.flashTime=Math.max(0,this.flashTime-dt);this.flash.visible=this.flashTime>0;
+  if(this.flash.visible){this.flash.position.copy(this.weapon.position).add(this.weapon.userData.muzzle.clone().applyQuaternion(this.weapon.quaternion));this.flash.position.z-=.08;this.flash.material.opacity=Math.min(1,this.flashTime/.035);this.flash.scale.setScalar(1+this.flashTime*5);}
   if(g.state.phase==='playing')updateGameCamera(g,dt);
+ }
+ flashShot(weapon){this.flashTime=.085;this.flash.material.color.set(weapon.id==='energy'?weapon.color:0xffdd97);}
+ updateProjection(){
+  this.camera.aspect=this.game.camera.aspect;
+  this.camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(35))/Math.min(1,this.camera.aspect)));
+  this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld(true);
+ }
+ muzzleWorld(){
+  if(!this.weapon)return this.game.camera.localToWorld(p(.25,-.19,-.95));
+  this.updateProjection();this.rig.updateMatrixWorld(true);
+  const muzzle=this.weapon.userData.muzzleNode.getWorldPosition(p()),depth=Math.max(.4,-muzzle.z);
+  // The gun has its own projection; preserve its screen position in the world camera.
+  const ndc=muzzle.project(this.camera),g=this.game;
+  const direction=p(ndc.x,ndc.y,.5).unproject(g.camera).sub(g.camera.position).normalize();
+  return g.camera.position.clone().addScaledVector(direction,depth/direction.dot(g.camera.getWorldDirection(p())));
  }
  render(renderer){
   if(!this.rig.visible)return;
-  this.camera.aspect=this.game.camera.aspect;
-  this.camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(35))/Math.min(1,this.camera.aspect)));
-  this.camera.updateProjectionMatrix();
+  this.updateProjection();
   const autoClear=renderer.autoClear;renderer.autoClear=false;renderer.clearDepth();
   renderer.render(this.scene,this.camera);renderer.autoClear=autoClear;
  }

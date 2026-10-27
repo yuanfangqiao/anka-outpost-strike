@@ -48,7 +48,7 @@ export function act(duel,id,payload){
      }
     }
     if(target)damage(duel,target,w.damage,id);
-    if(i<3)duel.effect({kind:'shot',from:origin.toArray(),to:origin.clone().addScaledVector(dir,distance).toArray(),color:w.color,shooter:id,hit:!!target});
+    if(i<3)duel.effect({kind:'shot',from:origin.toArray(),to:origin.clone().addScaledVector(dir,distance).toArray(),color:w.color,weapon,shooter:id,hit:!!target});
    }
   }
  }

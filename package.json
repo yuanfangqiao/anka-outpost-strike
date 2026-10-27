@@ -12,6 +12,8 @@
     "validate:aim": "node reports/mixamo/validate_new_aim.mjs",
     "test:duel": "node scripts/verify-duel.mjs",
     "test:online": "node scripts/verify-online.mjs",
+    "test:shots": "node scripts/verify-shot-effects.mjs",
+    "test:mobile": "node scripts/verify-mobile.mjs",
     "test:fps": "node scripts/verify-fps-supplies.mjs",
     "test:duel:ui": "node scripts/verify-duel-ui.mjs",
     "test:ai": "node scripts/verify-behavior-tree.mjs"

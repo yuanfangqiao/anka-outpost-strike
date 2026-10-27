@@ -2,6 +2,8 @@
 
 ![1793031776170](image/README/1793031776170.png)
 
+**1.2 更新**：第一人称加入枪口火光、飞行曳光与弹道余迹；移动端默认横屏，参照概念图重排摇杆、圆形动作键和底部道具，支持多指移动 / 开火 / 拖动瞄准。详见 [本次玩法说明](docs/GAMEPLAY-1.2.md)。
+
 **1.1 更新**：默认第一人称，按 V 或视角按钮切换；加入双方同步的五类地面补给，靠近 / F / 点击拾取；对战地图扩大并增加遮挡，复活优先远离敌人。详见 [本次玩法说明](docs/GAMEPLAY-1.1.md)。
 
 游戏首页为 `index.html`，角色动作实验室为 `characters.html`。已接入你提供的两份 Mixamo FBX，男女角色各有 16 段动画；游戏使用新版 `assets/characters/mixamo/*_aim.glb`。原始 Tripo 资产保留。完整16动作的可编辑源文件为 `source/male_scout_game.blend` 与 `source/female_striker_game.blend`。

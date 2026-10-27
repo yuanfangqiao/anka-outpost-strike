@@ -43,7 +43,7 @@ export class AnkaGame {
    this.buddy=new GameActor('female');this.scene.add(this.buddy.group);this.buddy.group.position.set(1,0,5.4);this.buddy.group.rotation.y=Math.PI;
    this.state.phase='menu';this.state.message='小队已就绪';this.emit();
   }catch(error){this.state.phase='error';this.state.message=error.message;this.emit();console.error(error);}}
- emit(){this.state.aimX=(this.aimNdc.x+1)*50;this.state.aimY=(1-this.aimNdc.y)*50;this.duel?.publish();this.state.partner=this.buddy?{name:this.buddy.kind==='male'?'小杰':'小葵',hp:this.buddy.hp??120,maxHp:120}:null;this.state.damagePulse=this.fx.damagePulse;this.state.roundTime=Math.ceil(this.roundTimer);this.onState({...this.state,weaponInfo:WEAPONS[this.state.weapon]});}
+ emit(){this.state.aiming=this.keys.has('MouseRight');this.state.crouching=this.keys.has('KeyC');this.state.aimX=(this.aimNdc.x+1)*50;this.state.aimY=(1-this.aimNdc.y)*50;this.duel?.publish();this.state.partner=this.buddy?{name:this.buddy.kind==='male'?'小杰':'小葵',hp:this.buddy.hp??120,maxHp:120}:null;this.state.damagePulse=this.fx.damagePulse;this.state.roundTime=Math.ceil(this.roundTimer);this.onState({...this.state,weaponInfo:WEAPONS[this.state.weapon]});}
  listen(target,name,fn,opts){target.addEventListener(name,fn,opts);this.listeners.push(()=>target.removeEventListener(name,fn,opts));}
  resize(){const w=this.container.clientWidth,h=this.container.clientHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
  bindInput(){
@@ -73,7 +73,7 @@ export class AnkaGame {
  replacePlayer(kind){if(this.player)this.player.dispose();this.player=new GameActor(kind);this.scene.add(this.player.group);this.state.character=kind;if(this.state.phase==='menu'&&this.buddy?.kind===kind){this.buddy.dispose();this.buddy=new GameActor(kind==='male'?'female':'male');this.scene.add(this.buddy.group);}}
  createDuelActor(kind){return new GameActor(kind);}
  async start(config={}){
-  await this.ready;this.roundId=config.session||globalThis.crypto?.randomUUID?.()||String(Date.now());this.fx.unlockAudio();this.keys.clear();this.heldFire=false;
+  await this.ready;this.roundId=config.session||globalThis.crypto?.randomUUID?.()||String(Date.now());this.fx.unlockAudio();this.keys.clear();this.heldFire=false;this.touchMove={x:0,y:0};
   this.clearBattle();if((config.map&&config.map!==this.state.map)||this.world.duel!==((config.mode||'story')==='versus'))this.setWorld(config.map||this.state.map,config.mode||'story');
   const kind=config.character||this.state.character;if(kind!==this.player.kind)this.replacePlayer(kind);
   this.state={...this.state,phase:'playing',mode:config.mode||'story',character:kind,hp:120,shield:0,weapon:0,reloading:0,grenades:3,medkits:3,shieldCharges:2,wave:0,kills:0,deaths:0,score:0,elapsed:0,boss:null,remaining:0,goal:0,hit:false,combo:0,notice:'',message:`${MAPS.find(m=>m.id===this.state.map)?.name||'前线'} · 清除机械威胁`};
@@ -138,11 +138,16 @@ export class AnkaGame {
  moveObject(position,dx,dz,r=.34){const b=this.world.bounds;if(!this.collision(position.x+dx,position.z,r,position.y))position.x+=dx;if(!this.collision(position.x,position.z+dz,r,position.y))position.z+=dz;position.x=clamp(position.x,b.minX+.8,b.maxX-.8);position.z=clamp(position.z,b.minZ+.8,b.maxZ-.8);}
  blocked(from,to){for(const c of this.world.colliders){const min=v3(c.minX,0,c.minZ),max=v3(c.maxX,c.height,c.maxZ);const ray=new THREE.Ray(from.clone(),to.clone().sub(from).normalize());const hit=ray.intersectBox(new THREE.Box3(min,max),v3());if(hit&&hit.distanceTo(from)<from.distanceTo(to)-.15)return true;}return false;}
  aimTarget(){return findAimTarget(this);}
+ showPlayerShot(to,weapon=WEAPONS[this.state.weapon]){
+  const first=this.state.perspective==='first',from=first&&this.view?this.view.muzzleWorld():this.player.muzzle();
+  this.fx.fire(from,to,{color:weapon.id==='energy'?weapon.color:0xffd27b,heavy:weapon.id==='sniper',player:true});
+  if(first)this.view?.flashShot(weapon);
+ }
  shotOrigin(){return this.state.perspective==='first'?this.camera.position.clone():this.player.muzzle();}
  aimDirection(){return this.aimTarget().sub(this.shotOrigin()).normalize();}
  fire(){if(this.fireCooldown>0||this.reloadLeft>0||this.rollLeft>0||this.state.hp<=0)return;const w=WEAPONS[this.state.weapon],item=this.inventory[this.state.weapon];if(item.ammo<=0){this.reload();return;}if(this.duel?.playerProtection>0){this.invulnerable=0;this.duel.playerProtection=0;}this.duel?.brain.hearShot(this.player.muzzle());item.ammo--;this.selectInventory();this.fireCooldown=1/w.rate;this.player.fire();const from=this.shotOrigin();const direction=this.aimDirection();
-  if(w.projectile){this.launchProjectile(from,direction.clone().multiplyScalar(w.projectile==='rocket'?24:18).add(v3(0,w.projectile==='rocket'?0:3,0)),{team:'player',damage:w.damage,radius:w.radius,gravity:w.projectile==='rocket'?0:9,fuse:w.projectile==='rocket'?2.5:1.8,kind:w.projectile});}
-  else for(let i=0;i<w.pellets;i++){const d=direction.clone().add(v3((Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread)).normalize();const to=this.resolveShot(from,d,w,this.network?.localId||'local',true);if(i<3)this.fx.fire(from,to,{color:w.color,heavy:w.id==='sniper'});}
+  if(w.projectile){if(this.state.perspective==='first')this.view?.flashShot(w);this.launchProjectile(from,direction.clone().multiplyScalar(w.projectile==='rocket'?24:18).add(v3(0,w.projectile==='rocket'?0:3,0)),{team:'player',damage:w.damage,radius:w.radius,gravity:w.projectile==='rocket'?0:9,fuse:w.projectile==='rocket'?2.5:1.8,kind:w.projectile});}
+  else for(let i=0;i<w.pellets;i++){const d=direction.clone().add(v3((Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread)).normalize();const to=this.resolveShot(from,d,w,this.network?.localId||'local',true);if(i<3)this.showPlayerShot(to,w);}
   if(this.network?.connected)this.network.send({type:'shot',from:from.toArray(),direction:direction.toArray(),weapon:this.state.weapon});
  }
  resolveShot(origin,direction,w,shooter='local',local=true){

@@ -48,7 +48,7 @@ export class OnlineDuel{
  effect(payload){this.showEffect(payload);this.net.broadcast({type:'pvp-effect',...payload});}
  showEffect(p){
   const g=this.game;
-  if(p.kind==='shot'&&vector(p.from)&&vector(p.to)){g.fx.fire(point(...p.from),point(...p.to),{color:p.color});if(p.shooter===this.local&&p.hit){g.state.hit=true;g.hitTime=.14;}}
+  if(p.kind==='shot'&&vector(p.from)&&vector(p.to)){if(p.shooter===this.local)g.showPlayerShot(point(...p.to),WEAPONS[p.weapon??g.state.weapon]);else g.fx.fire(point(...p.from),point(...p.to),{color:p.color});if(p.shooter===this.local&&p.hit){g.state.hit=true;g.hitTime=.14;}}
   else if(p.kind==='explosion'&&vector(p.p))g.fx.explosion(point(...p.p),{radius:p.radius});
   else if(p.kind==='heal'&&vector(p.p))g.fx.heal(point(...p.p));
   else if(p.kind==='shield'&&vector(p.p))g.fx.shield(point(...p.p));

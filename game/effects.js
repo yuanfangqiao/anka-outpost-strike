@@ -244,21 +244,31 @@ export class CombatEffects {
     return ring;
   }
 
-  fire(from, to, { color = 0xffd275, heavy = false } = {}) {
+  fire(from, to, { color = 0xffd275, heavy = false, player = false } = {}) {
     if (this.disposed || !finitePosition(from) || !finitePosition(to)) return;
     this._direction.subVectors(to, from);
     const length = this._direction.length();
     if (length < 0.0001) return;
     this._direction.multiplyScalar(1 / length);
-    const tracer = this._slot(this._tracers, from, heavy ? 0.12 : 0.075, color, heavy ? 1 : 0.84);
     const distance = Math.min(length, 120);
-    tracer.mesh.position.addScaledVector(this._direction, distance / 2);
+    const life = player ? Math.min(.26, .11 + distance / 550) : heavy ? .12 : .075;
+    const tracer = this._slot(this._tracers, from, life, color, player ? 1 : .84);
+    tracer.travel = player;tracer.distance = distance;tracer.radius = heavy ? .045 : player ? .028 : .013;
+    tracer.velocity.copy(this._direction);tracer.start = (tracer.start || new THREE.Vector3()).copy(from);
+    tracer.segment = player ? Math.min(distance, Math.max(1.4, distance * .22)) : distance;
+    if(player)tracer.mesh.material.color.lerp(new THREE.Color(0xfff4d2),.7);
+    tracer.mesh.position.addScaledVector(this._direction, tracer.segment / 2);
     tracer.mesh.quaternion.setFromUnitVectors(UP, this._direction);
-    const radius = heavy ? 0.025 : 0.013;
-    tracer.mesh.scale.set(radius, distance, radius);
+    tracer.mesh.scale.set(tracer.radius, tracer.segment, tracer.radius);
+    if(player){
+      // A short afterimage keeps the near-camera part readable between shots.
+      const trail=this._slot(this._tracers,from,.12,color,.65);
+      trail.travel=false;trail.mesh.position.addScaledVector(this._direction,distance/2);
+      trail.mesh.quaternion.copy(tracer.mesh.quaternion);trail.mesh.scale.set(.018,distance,.018);
+    }
     const flash = this._slot(this._bursts, from, heavy ? 0.095 : 0.055, color, 0.95);
     flash.kind = 'muzzle';
-    flash.radius = heavy ? 0.24 : 0.14;
+    flash.radius = player ? .07 : heavy ? 0.24 : 0.14;
     flash.mesh.geometry = this._geometry.burst;
     flash.mesh.quaternion.setFromUnitVectors(UP, this._direction);
     flash.mesh.scale.set(flash.radius, flash.radius * 1.65, flash.radius);
@@ -497,6 +507,11 @@ export class CombatEffects {
         }
         const t = slot.age / slot.life;
         slot.mesh.material.opacity = slot.alpha * Math.pow(1 - t, slot.kind === 'debris' ? 0.5 : 1.4);
+        if(pool === this._tracers && slot.travel){
+          const head=slot.segment+(slot.distance-slot.segment)*t,tail=Math.max(0,head-slot.segment);
+          slot.mesh.position.copy(slot.start).addScaledVector(slot.velocity,(head+tail)/2);
+          slot.mesh.material.opacity=slot.alpha*(1-Math.max(0,(t-.65)/.35));
+        }
         if (pool === this._rings) slot.mesh.scale.setScalar(slot.radius * (0.1 + 0.9 * Math.sqrt(t)));
         else if (pool === this._bursts) {
           if (slot.kind === 'muzzle') slot.mesh.scale.set(slot.radius * (1 + t), slot.radius * (1.7 + t), slot.radius * (1 + t));

@@ -1,0 +1,36 @@
+{
+  "results": [
+    {
+      "name": "desktop",
+      "shots": "visible muzzle and traveling tracer"
+    },
+    {
+      "name": "landscape",
+      "viewport": "844x390",
+      "landscape": "844x390",
+      "hitTargets": "reachable",
+      "multiTouch": "move + fire + drag aim",
+      "actions": "aim, crouch, weapon, shield, grenade, reload, jump, roll",
+      "release": "pointer cancel, pause, resize"
+    },
+    {
+      "name": "portrait",
+      "viewport": "390x844",
+      "landscape": "844x390",
+      "hitTargets": "reachable",
+      "multiTouch": "move + fire + drag aim",
+      "actions": "aim, crouch, weapon, shield, grenade, reload, jump, roll",
+      "release": "pointer cancel, pause, resize"
+    },
+    {
+      "name": "compact",
+      "viewport": "568x320",
+      "landscape": "568x320",
+      "hitTargets": "reachable",
+      "multiTouch": "move + fire + drag aim",
+      "actions": "aim, crouch, weapon, shield, grenade, reload, jump, roll",
+      "release": "pointer cancel, pause, resize"
+    }
+  ],
+  "pageErrors": []
+}

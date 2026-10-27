@@ -3,7 +3,7 @@ defineProps({state:Object});
 const emit=defineEmits(['perspective','interact']);
 </script>
 <template>
- <div class="play-controls" v-if="['menu','playing','paused'].includes(state.phase)">
+ <div class="play-controls" :class="{'is-menu':state.phase==='menu'}" v-if="['menu','playing','paused'].includes(state.phase)">
   <button class="perspective-button" :aria-label="state.perspective==='first'?'切换到第三人称':'切换到第一人称'" :aria-pressed="state.perspective==='first'" @pointerdown.stop @click="emit('perspective',state.perspective==='first'?'third':'first')">
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
    <span>{{state.perspective==='first'?'第一人称':'第三人称'}}</span><kbd>V</kbd>
