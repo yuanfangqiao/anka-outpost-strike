@@ -2,18 +2,39 @@
   "manifest_version": 2,
   "id": "anka-outpost-strike",
   "name": "ANKA 前线对决",
-  "version": "1.1.0",
+  "version": "1.4.1",
   "icon": "crosshair",
-  "description": "扫码邀请好友，选择角色和地图，进行双人三维对战。",
+  "description": "扫码邀请好友对战，或接入手机与ESP-Mosaico手柄控制当前角色。",
   "kind": "app",
   "system": false,
-  "backend": { "entry": "server/main.py" },
-  "ui": { "entry": "web/index.js", "route": "/anka-outpost-strike", "dock": { "order": 40 } },
+  "backend": {
+    "entry": "server/main.py"
+  },
+  "ui": {
+    "entry": "web/index.js",
+    "route": "/anka-outpost-strike",
+    "dock": {
+      "order": 40
+    }
+  },
   "build": {
-    "requires": ["node>=22.12.0"],
-    "steps": [{ "run": "npm ci --prefer-offline --no-audit --no-fund" }, { "run": "npm run build" }],
-    "output": { "entry": "dist/index.html" },
+    "requires": [
+      "node>=22.12.0"
+    ],
+    "steps": [
+      {
+        "run": "npm ci --prefer-offline --no-audit --no-fund"
+      },
+      {
+        "run": "npm run build"
+      }
+    ],
+    "output": {
+      "entry": "dist/index.html"
+    },
     "timeout": 600
   },
-  "permissions": ["net"]
+  "permissions": [
+    "net"
+  ]
 }

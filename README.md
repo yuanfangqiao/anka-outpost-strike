@@ -114,3 +114,11 @@ npm run build
 女角色：建模 50 + 免费检查 0 + 绑骨 25 + 五动画 50 = **125 积分**。
 
 总计 **250 积分**，余额从 600 变为 **350 积分**，冻结积分为 0。每项任务的完整 Task ID 和实际扣费记录在 `reports/tripo/cost-report.md`。所有生成均在国内环境 `cn` 完成，没有读取或写入项目 API Key。
+
+## 扫码手柄
+
+游戏右上角“手柄设备接入”为当前玩家绑定手机或 ESP-Mosaico；每人只接入一个设备。手机扫码直接打开独立网页，ESP 打开手柄应用后扫码。双主键为瞄准/开火；九宫格滑动移动、短点功能，中间圆形跳跃。跳跃绿框在线、红框离线。
+
+绑定由宿主 `devices` infra 提供，User / Share / Device 分别鉴权；访客手柄仅控制本人。键鼠或本机游戏触控会挂起手柄，点击手柄入口“继续游戏”恢复。断线/后台/暂停会释放输入，操作不重放。访客提交房主判定的技能返回 submitted，不冒充最终生效。
+
+验证：`npm run test:controller`、`npm run test:game`、`npm run test:online`、`npm run test:fps`。宿主接口、手机调试页和 ESP 独立工程见 Anka 的 `docs/DEVICES.md` 与 `device/esp32/README.md`。

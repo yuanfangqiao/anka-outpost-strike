@@ -272,6 +272,7 @@ export class AnkaGame {
   if(this.network?.isHost)this.network.broadcast({type:'finish',win,scores:this.matchScores});this.emit();
  }
  frame(time){const dt=Math.min(.045,Math.max(0,(time-this.lastTime)/1000));this.lastTime=time;this.now+=dt;this.fx.update(dt);this.world.update(dt,this.now);
+  this.deviceInput?.tick(time);
   const phase=this.state.phase;
   if(phase==='playing'&&this.player){this.state.elapsed+=dt;this.hitTime=Math.max(0,(this.hitTime||0)-dt);this.state.hit=this.hitTime>0;this.updateCamera(dt);this.updatePlayer(dt);this.updateBuddy(dt);
    if(this.duel)this.duel.update(dt);

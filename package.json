@@ -16,7 +16,8 @@
     "test:mobile": "node scripts/verify-mobile.mjs",
     "test:fps": "node scripts/verify-fps-supplies.mjs",
     "test:duel:ui": "node scripts/verify-duel-ui.mjs",
-    "test:ai": "node scripts/verify-behavior-tree.mjs"
+    "test:ai": "node scripts/verify-behavior-tree.mjs",
+    "test:controller": "node scripts/verify-controller.mjs"
   },
   "dependencies": {
     "qrcode": "^1.5.4",

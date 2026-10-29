@@ -5,7 +5,7 @@ from pathlib import Path
 from app.cordis import Service
 
 name = 'anka-outpost-strike'
-inject = ['rooms']
+inject = ['rooms', 'devices']
 provide = [name]
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,6 +15,8 @@ class FrontlineService(Service):
         super().__init__(ctx, name)
         ctx.fiber.effect(lambda: ctx.rooms.register(name, self._definition),
                          label='frontline room contract')
+        ctx.fiber.effect(lambda: ctx.devices.register(name),
+                         label='frontline controller adapter')
 
     def _definition(self):
         try:

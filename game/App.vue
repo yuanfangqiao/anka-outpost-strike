@@ -3,13 +3,14 @@ import { onMounted, onBeforeUnmount, reactive, ref, nextTick } from 'vue';
 import GameUI from './GameUI.vue';
 import RoomLobby from './RoomLobby.vue';
 import PlayControls from './PlayControls.vue';
+import ControllerControls from './ControllerControls.vue';
 import { AnkaGame } from './engine.js';
 import { GameNetwork } from './network.js';
 import { OnlineDuel } from './online-duel.js';
 import { mobileViewport, gameDelta, enterLandscape, activateTouchButton, suppressTouchClick } from './mobile.js';
 import './mobile.css';
 import { SETTINGS_KEY, SAVE_KEY } from './config.js';
-const viewport=ref(null);
+const viewport=ref(null),engineReady=ref(false);
 const mobile=reactive(mobileViewport()),inputVersion=ref(0);
 function resizeMobile(){Object.assign(mobile,mobileViewport());}
 function clearControls(){if(!engine)return;engine.keys.clear();engine.touchMove={x:0,y:0};engine.heldFire=false;}
@@ -42,6 +43,7 @@ onMounted(()=>{
   engine=new AnkaGame(viewport.value,s=>{Object.assign(state,s);if(s.perspective&&settings.perspective!==s.perspective){settings.perspective=s.perspective;saveSettings();}nextTick(drawMinimap);window.parent.postMessage({type:'anka-game-back-state',value:!!room.value||!['menu','loading'].includes(s.phase)},location.origin);});
   network=new GameNetwork({onEvent:(payload,id)=>Promise.resolve(engine.consumeNetwork(payload,id)).catch(console.error),onStatus:s=>{Object.assign(networkStatus,s);engine.networkStatus(s);if(s.state==='disconnected'&&engine.online){engine.state.phase='waiting';engine.heldFire=false;engine.emit();}},onRoom:value=>syncRoom(value).catch(error=>{roomError.value=error.message;})});
   engine.setNetwork(network);engine.setPerspective(settings.perspective);engine.setMuted(settings.muted);engine.setQuality(settings.quality);
+  engineReady.value=true;
   network.restore().catch(error=>{roomError.value=error.message;});
   window.addEventListener('message',onHostBack);
  }catch(error){state.phase='error';state.message=`无法启动三维画面：${error.message}`;console.error(error);}
@@ -93,6 +95,7 @@ function touchLook(delta){if(!engine||state.phase!=='playing')return;delta=gameD
 <template>
  <main @pointerdown.capture="activateTouchButton" @click.capture="suppressTouchClick" class="game-root" :class="{'mobile-layout':mobile.enabled,'mobile-rotated':mobile.rotated}" :style="mobile.enabled?{width:`${mobile.width}px`,height:`${mobile.height}px`}:{}">
   <div ref="viewport" class="game-viewport"></div>
+  <ControllerControls v-if="engineReady" :game="engine" :room="room" :phase="state.phase" />
   <GameUI v-show="!room||['playing','finished'].includes(room.phase)" :state="state" :mobile="mobile.enabled" :rotated="mobile.rotated" :input-version="inputVersion" :network-status="networkStatus" @start="start" @preview="engine?.preview($event.map,$event.character)" @pause="engine?.pause()" @resume="engine?.resume()" @menu="menu" @retry="retry" @weapon="engine?.setWeapon($event)" @ability="ability" @mute="mute" @quality="quality" @host="host" @join="join" @disconnect="disconnect" @touch-move="engine && (engine.touchMove=$event)" @touch-look="touchLook" @fire="setFire" @aim="setAim" @fullscreen="enterLandscape" />
   <PlayControls v-if="!room||['playing','finished'].includes(room.phase)" :state="state" @perspective="engine?.setPerspective($event)" @interact="engine?.interact()" />
   <RoomLobby v-if="room&&(!['playing','finished'].includes(room.phase)||['disconnected','error'].includes(networkStatus.state))" :room="room" :invite="invite" :status="networkStatus" :busy="roomBusy" :error="roomError" @command="roomAction" @invite="refreshInvite" @leave="leaveRoom" />
