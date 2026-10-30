@@ -24,6 +24,7 @@ try{
   const page=await context.newPage();activePage=page;page.on('pageerror',e=>errors.push(`${name}: ${e.message}`));
   await page.goto(base);await page.getByRole('button',{name:'开始人机对战',exact:true}).waitFor({timeout:30000});
   await page.screenshot({path:`${screenshots}/${name}-menu.png`});
+  assert.equal(await page.locator('.controller-entry').count(),touch?0:1,'controller pairing is available only on desktop');
   await page.evaluate(()=>{window.__qaGame=document.querySelector('#app').__vue_app__._instance.setupState.engine;});
   await page.getByRole('button',{name:'选择模式：主线闯关',exact:true}).click();await page.getByRole('button',{name:'开始任务',exact:true}).click();
   await page.locator('.phase-playing').waitFor();
@@ -36,11 +37,25 @@ try{
    assert.equal(await page.getByRole('button',{name:'全屏横屏',exact:true}).isVisible(),false,'touch fullscreen button must stay hidden on desktop');
    await context.close();results.push({name,shots:'visible muzzle and traveling tracer'});continue;
   }
-  const hitTargets=await page.evaluate(()=>['.mobile-fire','.mobile-aim','.mobile-jump','.mobile-roll','.mobile-crouch','.move-stick','.mobile-weapon-toggle','.reload-button','.shield-ability','.hud-top-buttons button[aria-label="暂停游戏"]','.controller-entry'].map(s=>{const e=document.querySelector(s),r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{selector:s,visible:r.x>=0&&r.y>=0&&r.right<=innerWidth+.1&&r.bottom<=innerHeight+.1,reachable:e===hit||e.contains(hit)};}));
+  const hitTargets=await page.evaluate(()=>['.mobile-fire','.mobile-aim','.mobile-jump','.mobile-roll','.mobile-crouch','.move-stick','.mobile-weapon-toggle','.reload-button','.shield-ability','.hud-top-buttons button[aria-label="暂停游戏"]'].map(s=>{const e=document.querySelector(s),r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{selector:s,visible:r.x>=0&&r.y>=0&&r.right<=innerWidth+.1&&r.bottom<=innerHeight+.1,reachable:e===hit||e.contains(hit)};}));
   assert.ok(hitTargets.every(t=>t.visible&&t.reachable),JSON.stringify(hitTargets));
   const cdp=await context.newCDPSession(page);
   const send=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points.map(p=>({...p,radiusX:3,radiusY:3,force:1}))});
   const physical=(x,y)=>layout.rotated?{x:-y,y:x}:{x,y};
+  // Every blank region, including the formerly excluded left 24%, turns the camera.
+  for(const fraction of [.1,.45,.65]){
+   const logical={x:layout.width*fraction,y:layout.height*.4};
+   const point=layout.rotated?{x:layout.height-logical.y,y:logical.x}:logical;
+   assert.ok(await page.evaluate(point=>document.elementFromPoint(point.x,point.y)?.classList.contains('touch-look-area'),point),'blank stage must accept look gestures');
+   const yaw=await page.evaluate(()=>window.__qaGame.lookYaw),delta=physical(20,-8);
+   const finger={id:9,...point};
+   await send('touchStart',[finger]);
+   await send('touchMove',[{...finger,x:finger.x+delta.x,y:finger.y+delta.y}]);
+   await page.waitForFunction(yaw=>window.__qaGame.lookYaw<yaw-.05,yaw,{timeout:5000});
+   await send('touchEnd',[]);
+   assert.deepEqual(await page.evaluate(()=>window.__qaGame.touchMove),{x:0,y:0},'look gestures must not move the player');
+   assert.equal(await page.evaluate(()=>window.__qaGame.heldFire),false,'look gestures must not fire');
+  }
   const stick=await center(page.getByLabel('移动摇杆',{exact:true}));
   const delta=physical(0,-30),move={id:1,x:stick.x+delta.x,y:stick.y+delta.y};
   await send('touchStart',[{id:1,...stick}]);await send('touchMove',[move]);

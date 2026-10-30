@@ -1,15 +1,15 @@
 [
   {
-    "file": "assets/characters--BIKozLB.css",
-    "bytes": 9383,
-    "gzip": 2892,
-    "brotli": 2483
-  },
-  {
-    "file": "assets/characters-DPAI-8cV.js",
+    "file": "assets/characters-CeQm3odZ.js",
     "bytes": 26761,
     "gzip": 7221,
     "brotli": 6443
+  },
+  {
+    "file": "assets/characters-k3SvFATG.css",
+    "bytes": 9225,
+    "gzip": 2838,
+    "brotli": 2441
   },
   {
     "file": "assets/female_striker-CIuDDZPX.glb",
@@ -18,16 +18,16 @@
     "brotli": 985692
   },
   {
-    "file": "assets/game-BOYIcVd0.js",
-    "bytes": 310727,
-    "gzip": 112418,
-    "brotli": 95551
+    "file": "assets/game-BStdSdLP.js",
+    "bytes": 320127,
+    "gzip": 115952,
+    "brotli": 98553
   },
   {
-    "file": "assets/game-C7SCD0Kc.css",
-    "bytes": 106708,
-    "gzip": 19726,
-    "brotli": 16969
+    "file": "assets/game-BvWIZoCq.css",
+    "bytes": 109981,
+    "gzip": 20305,
+    "brotli": 17445
   },
   {
     "file": "assets/male_scout-OM94kAuD.glb",
@@ -43,8 +43,8 @@
   },
   {
     "file": "characters.html",
-    "bytes": 5214,
-    "gzip": 2155,
-    "brotli": 1663
+    "bytes": 5390,
+    "gzip": 2266,
+    "brotli": 1752
   }
 ]

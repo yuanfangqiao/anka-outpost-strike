@@ -8,7 +8,7 @@ export const MODES = [
  {id:'story',name:'主线闯关',icon:'◈',description:'三波战斗 · 最终机甲 Boss'},
  {id:'survival',name:'生存模式',icon:'∞',description:'无限波次 · 难度逐渐提升'},
  {id:'coop',name:'合作副本',icon:'⌘',description:'AI 搭档 · 可邀请好友联机'},
- {id:'versus',name:'双方对战',icon:'⚔',description:'1 对 1 规则人机 · 先得 10 分获胜'},
+ {id:'versus',name:'双方对战',icon:'⚔',description:'1 对 1 人机 · 先得 10 分获胜'},
 ];
 export const WEAPONS = [
  {id:'rifle',name:'突击步枪',short:'AR-28',damage:24,rate:8.5,mag:28,reserve:196,reload:1.65,range:70,spread:.014,pellets:1,color:0xed7654},

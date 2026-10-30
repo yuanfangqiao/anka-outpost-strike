@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onBeforeUnmount, reactive, ref, nextTick } from 'vue';
+import { onMounted, onBeforeUnmount, reactive, ref, nextTick, computed } from 'vue';
 import GameUI from './GameUI.vue';
 import RoomLobby from './RoomLobby.vue';
 import PlayControls from './PlayControls.vue';
@@ -18,6 +18,8 @@ function deviceChanged(){clearControls();resizeMobile();inputVersion.value++;}
 const room=ref(null),invite=ref(null),roomBusy=ref(false),roomError=ref(''),leavePrompt=ref(false);
 let preparing='',disposed=false;
 const state=reactive({phase:'loading',loading:0,map:'desert',mode:'versus',character:'male',hp:120,maxHp:120,shield:0,ammo:28,reserve:196,weapon:0,grenades:3,medkits:3,shieldCharges:2,wave:0,kills:0,score:0,elapsed:0,remaining:0,message:'正在准备行动',notice:'',aimX:50,aimY:50});
+const showMenuToolbar=computed(()=>state.phase==='menu'&&(!room.value||['playing','finished'].includes(room.value.phase)));
+const showHudToolbar=computed(()=>!mobile.enabled&&state.phase==='playing'&&(!room.value||['playing','finished'].includes(room.value.phase)));
 const networkStatus=reactive({state:'offline',code:'',peers:1,error:'',members:[]});
 let engine,network,lastConfig={map:'desert',mode:'versus',character:'male'};
 let settings={muted:false,quality:mobile.enabled?'low':'medium',perspective:'first'};
@@ -95,9 +97,9 @@ function touchLook(delta){if(!engine||state.phase!=='playing')return;delta=gameD
 <template>
  <main @pointerdown.capture="activateTouchButton" @click.capture="suppressTouchClick" class="game-root" :class="{'mobile-layout':mobile.enabled,'mobile-rotated':mobile.rotated}" :style="mobile.enabled?{width:`${mobile.width}px`,height:`${mobile.height}px`}:{}">
   <div ref="viewport" class="game-viewport"></div>
-  <ControllerControls v-if="engineReady" :game="engine" :room="room" :phase="state.phase" />
+  <ControllerControls v-if="engineReady&&!mobile.enabled" :game="engine" :room="room" :phase="state.phase" :menu-toolbar="showMenuToolbar" :hud-toolbar="showHudToolbar" />
   <GameUI v-show="!room||['playing','finished'].includes(room.phase)" :state="state" :mobile="mobile.enabled" :rotated="mobile.rotated" :input-version="inputVersion" :network-status="networkStatus" @start="start" @preview="engine?.preview($event.map,$event.character)" @pause="engine?.pause()" @resume="engine?.resume()" @menu="menu" @retry="retry" @weapon="engine?.setWeapon($event)" @ability="ability" @mute="mute" @quality="quality" @host="host" @join="join" @disconnect="disconnect" @touch-move="engine && (engine.touchMove=$event)" @touch-look="touchLook" @fire="setFire" @aim="setAim" @fullscreen="enterLandscape" />
-  <PlayControls v-if="!room||['playing','finished'].includes(room.phase)" :state="state" @perspective="engine?.setPerspective($event)" @interact="engine?.interact()" />
+  <PlayControls v-if="!room||['playing','finished'].includes(room.phase)" :state="state" :menu-toolbar="showMenuToolbar" :hud-toolbar="showHudToolbar" @perspective="engine?.setPerspective($event)" @interact="engine?.interact()" />
   <RoomLobby v-if="room&&(!['playing','finished'].includes(room.phase)||['disconnected','error'].includes(networkStatus.state))" :room="room" :invite="invite" :status="networkStatus" :busy="roomBusy" :error="roomError" @command="roomAction" @invite="refreshInvite" @leave="leaveRoom" />
   <div v-if="room&&['playing','finished'].includes(room.phase)" class="online-room-controls"><span>{{networkStatus.ping||'—'}} ms · {{room.code}}</span><button v-if="room.self===room.host" @click="roomAction({action:'lobby'})">返回大厅</button><button @click="leaveRoom">离开房间</button><p v-if="roomError" role="alert">{{roomError}}</p></div>
   <div v-if="leavePrompt" class="leave-room-dialog" role="dialog" aria-modal="true" aria-label="离开房间"><div><h2>离开这个房间？</h2><p>{{room?.self===room?.host?'离开后会关闭房间，好友也将结束访问。':'离开后需要新的邀请才能再次加入。'}}</p><button @click="leavePrompt=false">继续游戏</button><button @click="leaveRoom">离开房间</button></div></div>

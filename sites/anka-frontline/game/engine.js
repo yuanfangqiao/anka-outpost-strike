@@ -36,8 +36,8 @@ export class AnkaGame {
   this.lastTime=performance.now();this.renderer.setAnimationLoop(time=>this.frame(time));
   this.ready=this.load();
  }
- async load(){try{await preloadActors(p=>{this.state.loading=p;this.emit();});this.player=new GameActor('male');this.scene.add(this.player.group);this.player.group.position.set(-.8,0,5);this.player.group.rotation.y=Math.PI;
-   this.buddy=new GameActor('female');this.scene.add(this.buddy.group);this.buddy.group.position.set(1,0,5.4);this.buddy.group.rotation.y=Math.PI;
+ async load(){try{await preloadActors(p=>{this.state.loading=p;this.emit();});this.player=new GameActor('male');this.scene.add(this.player.group);this.player.group.position.set(1,0,5.4);this.player.group.rotation.y=Math.PI;
+   this.buddy=new GameActor('female');this.scene.add(this.buddy.group);this.buddy.group.position.set(-.8,0,5);this.buddy.group.rotation.y=Math.PI;
    this.state.phase='menu';this.state.message='小队已就绪';this.emit();
   }catch(error){this.state.phase='error';this.state.message=error.message;this.emit();console.error(error);}}
  emit(){this.state.aimX=(this.aimNdc.x+1)*50;this.state.aimY=(1-this.aimNdc.y)*50;this.state.partner=this.buddy?{name:this.buddy.kind==='male'?'小杰':'小葵',hp:this.buddy.hp??120,maxHp:120}:null;this.state.damagePulse=this.fx.damagePulse;this.state.roundTime=Math.ceil(this.roundTimer);this.onState({...this.state,weaponInfo:WEAPONS[this.state.weapon]});}
@@ -80,7 +80,7 @@ export class AnkaGame {
   this.placePickups();this.emit();this.sendSession();
  }
  clearBattle(){for(const e of this.enemies)e.mesh.removeFromParent();for(const p of this.pickups)p.mesh.removeFromParent();for(const p of this.projectiles)p.mesh.removeFromParent();for(const t of this.telegraphs)t.mesh.removeFromParent();this.enemies=[];this.pickups=[];this.projectiles=[];this.telegraphs=[];this.pendingSpawns=[];this.waveDelay=0;for(const r of this.remotes.values())r.actor.dispose();this.remotes.clear();}
- toMenu(){this.state.phase='menu';this.keys.clear();this.heldFire=false;document.exitPointerLock?.();this.clearBattle();this.player.dead=false;this.player.group.position.set(-.8,0,5);if(!this.buddy){this.buddy=new GameActor(this.player.kind==='male'?'female':'male');this.scene.add(this.buddy.group);}this.buddy.group.position.set(1,0,5.4);this.emit();}
+ toMenu(){this.state.phase='menu';this.keys.clear();this.heldFire=false;document.exitPointerLock?.();this.clearBattle();this.player.dead=false;this.player.group.position.set(1,0,5.4);if(!this.buddy){this.buddy=new GameActor(this.player.kind==='male'?'female':'male');this.scene.add(this.buddy.group);}this.buddy.group.position.set(-.8,0,5);this.emit();}
  pause(){this.state.phase='paused';this.heldFire=false;document.exitPointerLock?.();this.emit();}
  resume(){this.state.phase='playing';this.keys.clear();this.sendSession();this.emit();}
  setMuted(value){this.state.muted=value;this.fx.setMuted(value);this.emit();}
@@ -280,7 +280,7 @@ export class AnkaGame {
    if(this.state.mode==='versus'){this.roundTimer-=dt;if(this.roundTimer<=0&&(!this.network?.connected||this.network.isHost))this.finish(true);}
    this.noticeTime=Math.max(0,this.noticeTime-dt);if(this.noticeTime===0)this.state.notice='';this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)this.state.combo=0;
    this.updateNetwork(dt);
-  }else if(phase==='menu'&&this.player){this.player.group.position.set(-.8,0,5);this.player.group.rotation.y=.22;this.player.update(dt,{aiming:true});if(this.buddy){this.buddy.group.position.set(1,0,5.4);this.buddy.group.rotation.y=.1;this.buddy.update(dt,{aiming:true});}const t=this.now*.08;this.camera.position.set(Math.sin(t)*1.5+2.8,2.6,10.7);this.camera.lookAt(.1,1.05,5);}
+  }else if(phase==='menu'&&this.player){this.player.group.position.set(1,0,5.4);this.player.group.rotation.y=.22;this.player.update(dt,{aiming:true});if(this.buddy){this.buddy.group.position.set(-.8,0,5);this.buddy.group.rotation.y=.1;this.buddy.update(dt,{aiming:true});}const t=this.now*.08;this.camera.position.set(Math.sin(t)*1.5+2.8,2.6,10.7);this.camera.lookAt(.1,1.05,5);}
   else if((phase==='victory'||phase==='defeat')&&this.player)this.player.update(dt,{victory:phase==='victory',dead:phase==='defeat'});
   for(const r of this.remotes.values()){if(this.state.mode==='versus'&&this.network?.isHost&&r.hp<=0){r.respawn=(r.respawn||3)-dt;if(r.respawn<=0){r.hp=120;r.dead=false;r.respawn=0;}}r.actor.group.position.lerp(r.target,1-Math.exp(-12*dt));r.actor.group.rotation.y=r.yaw||0;r.actor.update(dt,{moving:r.moving,aiming:true,dead:r.dead});}
   this.uiTimer-=dt;if(this.uiTimer<=0){this.emit();this.uiTimer=.1;}
