@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><title>Character optimization review</title>
+<style>body{margin:0;background:#17232d;color:white;font:16px sans-serif}main{display:flex}section{text-align:center}canvas{display:block;width:384px;height:512px;background:#cad1d5}</style>
+<main></main>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+const loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder),cache=new Map();
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setSize(384,512);renderer.setPixelRatio(1);
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+window.capture=async(kind,variant,clip='AimIdle',fraction=.4,angle=0)=>{
+ const url=variant==='original'?`/assets/characters/mixamo/${kind}_aim.glb`:
+  variant==='balanced'?`/assets/characters/optimized/${kind}.glb`:`/reports/optimization/candidates/${kind}-vertex.glb`;
+ if(!cache.has(url))cache.set(url,await loader.loadAsync(url));
+ const gltf=cache.get(url),model=gltf.scene;
+ const scene=new THREE.Scene();scene.add(model);
+ scene.add(new THREE.HemisphereLight(0xe6f3ff,0x8e653f,2.5));
+ const sun=new THREE.DirectionalLight(0xffe8c1,3.1);sun.position.set(-14,25,12);scene.add(sun);
+ const fill=new THREE.DirectionalLight(0xb3d5f3,.65);fill.position.set(8,8,-15);scene.add(fill);
+ const mixer=new THREE.AnimationMixer(model),anim=gltf.animations.find(a=>a.name===clip);
+ if(!anim)throw Error(`Missing ${clip}`);
+ const action=mixer.clipAction(anim).play();action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;
+ mixer.setTime(anim.duration*fraction);model.updateMatrixWorld(true);
+ const camera=new THREE.PerspectiveCamera(35,384/512,.01,100);
+ camera.position.set(Math.sin(angle)*3.8,1.35,Math.cos(angle)*3.8);camera.lookAt(0,1,0);
+ renderer.render(scene,camera);
+ const png=renderer.domElement.toDataURL('image/png');
+ mixer.stopAllAction();mixer.uncacheRoot(model);scene.remove(model);
+ return png;
+};
+window.compare=async(kind,clip='AimIdle',fraction=.4,angle=0,includeVertex=false)=>{
+ document.querySelector('main').innerHTML='';
+ for(const variant of (includeVertex?['original','balanced','vertex']:['original','balanced'])){
+  const section=document.createElement('section');section.textContent=`${kind} · ${variant}`;
+  const img=new Image();img.src=await window.capture(kind,variant,clip,fraction,angle);section.append(img);document.querySelector('main').append(section);
+ }
+};
+window.ready=true;
+</script>

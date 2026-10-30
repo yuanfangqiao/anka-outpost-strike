@@ -1,15 +1,16 @@
 /** Tripo CN characters with retargeted Mixamo aiming and local game animation clips. */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 export const CHARACTER_URLS = {
-  male: new URL('../assets/characters/mixamo/male_scout_aim.glb', import.meta.url).href,
-  female: new URL('../assets/characters/mixamo/female_striker_aim.glb', import.meta.url).href,
+  male: new URL('../assets/characters/optimized/male_scout.glb', import.meta.url).href,
+  female: new URL('../assets/characters/optimized/female_striker.glb', import.meta.url).href,
 };
 
 export async function loadCharacter(kind = 'male') {
   if (!CHARACTER_URLS[kind]) throw new Error(`Unknown character: ${kind}`);
-  const gltf = await new GLTFLoader().loadAsync(CHARACTER_URLS[kind]);
+  const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(CHARACTER_URLS[kind]);
   const model = gltf.scene;
   const mixer = new THREE.AnimationMixer(model);
   const actions = Object.fromEntries(gltf.animations.map(clip => [clip.name, mixer.clipAction(clip)]));

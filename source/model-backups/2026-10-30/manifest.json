@@ -1,0 +1,14 @@
+[
+  {
+    "file": "assets/characters/mixamo/male_scout_aim.glb",
+    "backup": "source/model-backups/2026-10-30/male_scout_aim.glb",
+    "bytes": 7973144,
+    "sha256": "6950a076e8154db4d49e23f7373ab4d2a8b194c28caa983b4babcf2c369d1697"
+  },
+  {
+    "file": "assets/characters/mixamo/female_striker_aim.glb",
+    "backup": "source/model-backups/2026-10-30/female_striker_aim.glb",
+    "bytes": 8201192,
+    "sha256": "7ea44240c92f74852136d23059039b205fbacfaff2efbb5676ec4d0d85b5dd08"
+  }
+]

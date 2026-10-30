@@ -34,7 +34,7 @@ async function copy(){try{await navigator.clipboard.writeText(pair.value.url);}c
 onBeforeUnmount(()=>{clearInterval(timer);receiver?.dispose();});
 </script>
 <template>
- <div class="controller-tools">
+ <div class="controller-tools" :class="{'is-menu':phase==='menu'}">
   <button class="controller-entry" @pointerdown.stop @click="open"><span :class="{online:connected}"/>{{connected?'手柄已连接':'手柄设备接入'}}</button>
   <div v-if="show" class="controller-overlay" @pointerdown.stop @click.self="close" role="dialog" aria-modal="true" aria-label="手柄设备接入">
    <section class="controller-modal"><button class="controller-close" @click="close" aria-label="关闭手柄配对">×</button>

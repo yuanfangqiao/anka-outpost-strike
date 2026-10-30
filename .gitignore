@@ -58,3 +58,7 @@ Thumbs.db
 coverage/
 test-results/
 playwright-report/
+reports/optimization/candidates/
+reports/optimization/visuals/
+reports/optimization/mobile/
+reports/optimization/baked/

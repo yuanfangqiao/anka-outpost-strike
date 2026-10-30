@@ -1,0 +1,28 @@
+[
+  {
+    "id": "male_scout",
+    "originalBytes": 7973144,
+    "optimizedBytes": 1718968,
+    "backupSHA256": "6950a076e8154db4d49e23f7373ab4d2a8b194c28caa983b4babcf2c369d1697",
+    "bones": 65,
+    "clips": 16,
+    "samples": 80,
+    "maxBoneError": 0.0005359845735869111,
+    "maxBoundsError": 0.00289037635685868,
+    "validationErrors": 0,
+    "validationWarnings": 1
+  },
+  {
+    "id": "female_striker",
+    "originalBytes": 8201192,
+    "optimizedBytes": 1762824,
+    "backupSHA256": "7ea44240c92f74852136d23059039b205fbacfaff2efbb5676ec4d0d85b5dd08",
+    "bones": 65,
+    "clips": 16,
+    "samples": 80,
+    "maxBoneError": 0.0006443547721801057,
+    "maxBoundsError": 0.001410452941575578,
+    "validationErrors": 0,
+    "validationWarnings": 1
+  }
+]

@@ -1,15 +1,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { createWeapon } from './assets.js';
 
 const urls={
- male:new URL('../assets/characters/mixamo/male_scout_aim.glb',import.meta.url).href,
- female:new URL('../assets/characters/mixamo/female_striker_aim.glb',import.meta.url).href,
-};
-const fallback={
- male:new URL('../assets/characters/tripo/male_scout_animated.glb',import.meta.url).href,
- female:new URL('../assets/characters/tripo/female_striker_animated.glb',import.meta.url).href,
+ male:new URL('../assets/characters/optimized/male_scout.glb',import.meta.url).href,
+ female:new URL('../assets/characters/optimized/female_striker.glb',import.meta.url).href,
 };
 const cache=new Map();
 const UP=new THREE.Vector3(0,1,0);
@@ -18,10 +15,8 @@ const Q=()=>new THREE.Quaternion();
 
 export async function preloadActors(onProgress=()=>{}) {
  await Promise.all(['male','female'].map(async(kind)=>{
-  const loader=new GLTFLoader();
-  let gltf;
-  try { gltf=await loader.loadAsync(urls[kind]); }
-  catch { gltf=await loader.loadAsync(fallback[kind]); }
+  const loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  const gltf=await loader.loadAsync(urls[kind]);
   cache.set(kind,gltf);onProgress(cache.size/2);
  }));
 }

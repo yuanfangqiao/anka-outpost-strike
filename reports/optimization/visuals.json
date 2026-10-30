@@ -1,0 +1,154 @@
+{
+  "summary": {
+    "averageSSIM": 0.9562844889175562,
+    "minimumSSIM": 0.9329256644320331,
+    "minimumSilhouetteIoU": 0.9972307424838874
+  },
+  "errors": [],
+  "results": [
+    {
+      "kind": "male_scout",
+      "clip": "AimIdle",
+      "angle": 0,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9658490403586837,
+      "silhouetteIoU": 0.9987385185477194,
+      "meanRGBError": 0.012665804551278732
+    },
+    {
+      "kind": "male_scout",
+      "clip": "AimIdle",
+      "angle": 0.9,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9600483892741923,
+      "silhouetteIoU": 0.9977618043300478,
+      "meanRGBError": 0.011128637454781048
+    },
+    {
+      "kind": "male_scout",
+      "clip": "Idle",
+      "angle": 3.141592653589793,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9628775382560008,
+      "silhouetteIoU": 0.9980373700759017,
+      "meanRGBError": 0.008641200123197764
+    },
+    {
+      "kind": "male_scout",
+      "clip": "Run",
+      "angle": 0.4,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9485557839130847,
+      "silhouetteIoU": 0.9988843856354059,
+      "meanRGBError": 0.013280176667092164
+    },
+    {
+      "kind": "male_scout",
+      "clip": "CrouchIdle",
+      "angle": 0,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9624306081933521,
+      "silhouetteIoU": 0.9984211748316694,
+      "meanRGBError": 0.013608428898995556
+    },
+    {
+      "kind": "male_scout",
+      "clip": "Roll",
+      "angle": 0.8,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9329256644320331,
+      "silhouetteIoU": 0.9974674161467664,
+      "meanRGBError": 0.01143385103336123
+    },
+    {
+      "kind": "male_scout",
+      "clip": "Reload",
+      "angle": 0.3,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9603437696469683,
+      "silhouetteIoU": 0.9983716454839596,
+      "meanRGBError": 0.0131228981254918
+    },
+    {
+      "kind": "male_scout",
+      "clip": "Death",
+      "angle": 0.8,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9622136002417929,
+      "silhouetteIoU": 0.9985576040491988,
+      "meanRGBError": 0.011118670191494989
+    },
+    {
+      "kind": "female_striker",
+      "clip": "AimIdle",
+      "angle": 0,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9612683887322085,
+      "silhouetteIoU": 0.9983734491529823,
+      "meanRGBError": 0.013826315538876114
+    },
+    {
+      "kind": "female_striker",
+      "clip": "AimIdle",
+      "angle": 0.9,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9585551011975622,
+      "silhouetteIoU": 0.9973089879801463,
+      "meanRGBError": 0.013697935171038535
+    },
+    {
+      "kind": "female_striker",
+      "clip": "Idle",
+      "angle": 3.141592653589793,
+      "variant": "balanced",
+      "foregroundSSIM": 0.961941441817256,
+      "silhouetteIoU": 0.9977568229967183,
+      "meanRGBError": 0.01119823717021945
+    },
+    {
+      "kind": "female_striker",
+      "clip": "Run",
+      "angle": 0.4,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9411816317015299,
+      "silhouetteIoU": 0.9972307424838874,
+      "meanRGBError": 0.016043642569930062
+    },
+    {
+      "kind": "female_striker",
+      "clip": "CrouchIdle",
+      "angle": 0,
+      "variant": "balanced",
+      "foregroundSSIM": 0.967179276707083,
+      "silhouetteIoU": 0.9987201449189753,
+      "meanRGBError": 0.012811059801083881
+    },
+    {
+      "kind": "female_striker",
+      "clip": "Roll",
+      "angle": 0.8,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9417099031645083,
+      "silhouetteIoU": 0.9979627387876819,
+      "meanRGBError": 0.012745300665366386
+    },
+    {
+      "kind": "female_striker",
+      "clip": "Reload",
+      "angle": 0.3,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9598227873360127,
+      "silhouetteIoU": 0.9983516089729807,
+      "meanRGBError": 0.01356730274230622
+    },
+    {
+      "kind": "female_striker",
+      "clip": "Death",
+      "angle": 0.8,
+      "variant": "balanced",
+      "foregroundSSIM": 0.9536488977086299,
+      "silhouetteIoU": 0.9978005289204263,
+      "meanRGBError": 0.012979754495079172
+    }
+  ]
+}

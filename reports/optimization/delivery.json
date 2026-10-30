@@ -1,0 +1,389 @@
+{
+  "results": [
+    {
+      "name": "desktop",
+      "coldBytes": 2212521,
+      "warmBytes": 1187,
+      "cold": [
+        {
+          "url": "/play/anka-outpost-strike",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 1014
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-C7SCD0Kc.css",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 17312
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-BOYIcVd0.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 95901
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/meshopt_decoder.module-DTfL97y_.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 142304
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/female_striker-CIuDDZPX.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 986030
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/male_scout-OM94kAuD.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 954671
+        },
+        {
+          "url": "/favicon.ico",
+          "status": 200,
+          "encoding": "gzip",
+          "fromDiskCache": false,
+          "bytes": 15289
+        },
+        {
+          "url": "http://127.0.0.1:18772/398735e9-f461-443d-bc1e-73e90d59eb83",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/44a0bac2-0999-4ed2-b0d0-bcea21a3795a",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/38de8cd5-bd6c-4148-9331-250f3264b5aa",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/e402cb63-03ab-4f82-b186-db092a7ecdb9",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/924fa950-7491-453d-80a3-76b359c7f188",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/1176c769-a57f-4813-ab9b-4e4dc0089b21",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        }
+      ],
+      "warm": [
+        {
+          "url": "/play/anka-outpost-strike",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 1014
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-BOYIcVd0.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/meshopt_decoder.module-DTfL97y_.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-C7SCD0Kc.css",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/male_scout-OM94kAuD.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": true,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/female_striker-CIuDDZPX.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": true,
+          "bytes": 0
+        },
+        {
+          "url": "/favicon.ico",
+          "status": 200,
+          "encoding": "gzip",
+          "fromDiskCache": false,
+          "bytes": 173
+        },
+        {
+          "url": "http://127.0.0.1:18772/3cc44554-4fa3-47f5-a4f0-59555486cf77",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/5ed75346-2bff-46fb-a2c0-a29f28e45643",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/0d5bb6c9-a3b5-4d62-80e8-469f43d29dad",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/68ac2cb6-acea-4e7a-a235-d78d2860ed1b",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/bb9cc194-d0b0-44e4-808d-c55c555715a0",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/72393313-94e9-4f32-9de7-7a44ce53fe5c",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        }
+      ],
+      "startedGame": true
+    },
+    {
+      "name": "phone",
+      "coldBytes": 2212521,
+      "warmBytes": 1187,
+      "cold": [
+        {
+          "url": "/play/anka-outpost-strike",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 1014
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-C7SCD0Kc.css",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 17312
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-BOYIcVd0.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 95901
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/meshopt_decoder.module-DTfL97y_.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 142304
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/female_striker-CIuDDZPX.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 986030
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/male_scout-OM94kAuD.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 954671
+        },
+        {
+          "url": "/favicon.ico",
+          "status": 200,
+          "encoding": "gzip",
+          "fromDiskCache": false,
+          "bytes": 15289
+        },
+        {
+          "url": "http://127.0.0.1:18772/f6955e12-38bc-43a1-b3a4-bd2f6350d3c4",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/069df803-d1fc-4cd2-983a-f8bcee56c97b",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/a6e595a8-a86c-4a3c-8a4c-ece305fbc84d",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/e136adbf-c336-4eb2-b5c7-c5293edfcc72",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/1cb8f4b8-17e4-4bca-8ac3-a13c9f5a8892",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/5ce0ec87-468c-4f2e-810b-3ac41ffa5438",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        }
+      ],
+      "warm": [
+        {
+          "url": "/play/anka-outpost-strike",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 1014
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-BOYIcVd0.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/meshopt_decoder.module-DTfL97y_.js",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/game-C7SCD0Kc.css",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/male_scout-OM94kAuD.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": true,
+          "bytes": 0
+        },
+        {
+          "url": "/plugins/anka-outpost-strike/dist/assets/female_striker-CIuDDZPX.glb",
+          "status": 200,
+          "encoding": "br",
+          "fromDiskCache": true,
+          "bytes": 0
+        },
+        {
+          "url": "/favicon.ico",
+          "status": 200,
+          "encoding": "gzip",
+          "fromDiskCache": false,
+          "bytes": 173
+        },
+        {
+          "url": "http://127.0.0.1:18772/bfbb4386-5ab1-49a0-a1cc-5d8ad5ea24ec",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/9465a25e-25cb-4465-8a2e-10d5fd1ae278",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/57028181-c303-447e-b66f-9f94594d3ea9",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/14daa741-e8a5-4f76-877a-b2a84ec5b541",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/de2777ec-3b6b-4dba-b95e-2e4354bbe736",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        },
+        {
+          "url": "http://127.0.0.1:18772/751a6b99-11f7-4091-9ef8-621b4940b3a4",
+          "status": 200,
+          "encoding": "identity",
+          "fromDiskCache": false,
+          "bytes": 0
+        }
+      ],
+      "startedGame": true
+    }
+  ],
+  "errors": []
+}

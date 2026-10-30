@@ -8,7 +8,7 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.PL
 const base=process.env.ANKA_QA_URL||'http://127.0.0.1:5173';
 const screenshots=process.env.ANKA_QA_SCREENSHOTS||new URL('../reports/game/mobile/',import.meta.url).pathname;
 fs.mkdirSync(screenshots,{recursive:true});
-const errors=[],results=[];
+const errors=[],results=[];let activePage;
 const center=async locator=>{const b=await locator.boundingBox();return{x:b.x+b.width/2,y:b.y+b.height/2};};
 const wait=(page,fn)=>page.waitForFunction(fn,{},{timeout:5000});
 async function captureShot(page,name){
@@ -21,7 +21,7 @@ try{
  for(const [name,width,height,touch]of[['desktop',1440,900,false],['landscape',844,390,true],['portrait',390,844,true],['compact',568,320,true]]){
   const context=await browser.newContext({viewport:{width,height},screen:{width,height},hasTouch:touch,isMobile:touch,deviceScaleFactor:1});
   await context.addInitScript(()=>localStorage.setItem('anka-desert-strike-settings-v1',JSON.stringify({quality:'low',muted:true,perspective:'first'})));
-  const page=await context.newPage();page.on('pageerror',e=>errors.push(`${name}: ${e.message}`));
+  const page=await context.newPage();activePage=page;page.on('pageerror',e=>errors.push(`${name}: ${e.message}`));
   await page.goto(base);await page.getByRole('button',{name:'开始人机对战',exact:true}).waitFor({timeout:30000});
   await page.screenshot({path:`${screenshots}/${name}-menu.png`});
   await page.evaluate(()=>{window.__qaGame=document.querySelector('#app').__vue_app__._instance.setupState.engine;});
@@ -36,7 +36,7 @@ try{
    assert.equal(await page.getByRole('button',{name:'全屏横屏',exact:true}).isVisible(),false,'touch fullscreen button must stay hidden on desktop');
    await context.close();results.push({name,shots:'visible muzzle and traveling tracer'});continue;
   }
-  const hitTargets=await page.evaluate(()=>['.mobile-fire','.mobile-aim','.mobile-jump','.mobile-roll','.mobile-crouch','.move-stick','.mobile-weapon-toggle','.reload-button','.shield-ability','.hud-top-buttons button'].map(s=>{const e=document.querySelector(s),r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{selector:s,visible:r.x>=0&&r.y>=0&&r.right<=innerWidth+.1&&r.bottom<=innerHeight+.1,reachable:e===hit||e.contains(hit)};}));
+  const hitTargets=await page.evaluate(()=>['.mobile-fire','.mobile-aim','.mobile-jump','.mobile-roll','.mobile-crouch','.move-stick','.mobile-weapon-toggle','.reload-button','.shield-ability','.hud-top-buttons button[aria-label="暂停游戏"]','.controller-entry'].map(s=>{const e=document.querySelector(s),r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{selector:s,visible:r.x>=0&&r.y>=0&&r.right<=innerWidth+.1&&r.bottom<=innerHeight+.1,reachable:e===hit||e.contains(hit)};}));
   assert.ok(hitTargets.every(t=>t.visible&&t.reachable),JSON.stringify(hitTargets));
   const cdp=await context.newCDPSession(page);
   const send=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points.map(p=>({...p,radiusX:3,radiusY:3,force:1}))});
@@ -87,4 +87,10 @@ try{
   console.log(name,'touch checks passed');await context.close();
  }
  assert.deepEqual(errors,[],'no browser errors');fs.writeFileSync(`${screenshots}/checks.json`,JSON.stringify({results,pageErrors:errors},null,2));console.log(JSON.stringify({results,pageErrors:errors},null,2));
+}catch(error){
+ if(activePage&&!activePage.isClosed()){
+  console.error('Input QA state',await activePage.evaluate(()=>({phase:window.__qaGame?.state.phase,hp:window.__qaGame?.state.hp})));
+  await activePage.screenshot({path:`${screenshots}/failure.png`});
+ }
+ throw error;
 }finally{await browser.close();}

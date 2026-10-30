@@ -1,0 +1,324 @@
+[
+  {
+    "id": "male_scout",
+    "variant": "balanced",
+    "file": "assets/characters/optimized/male_scout.glb",
+    "originalBytes": 7973144,
+    "optimizedBytes": 1718968,
+    "before": {
+      "triangles": 19800,
+      "vertices": 28911,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "Shoot",
+        "AimIdle",
+        "AimLower",
+        "Walk",
+        "TripoShoot",
+        "Run",
+        "Jump",
+        "Idle",
+        "AimRaise",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/png",
+          "bytes": 1409260
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 516142
+        },
+        {
+          "mime": "image/png",
+          "bytes": 2561020
+        }
+      ],
+      "animationChannels": 3120
+    },
+    "after": {
+      "triangles": 18173,
+      "vertices": 27089,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "Shoot",
+        "AimIdle",
+        "AimLower",
+        "Walk",
+        "TripoShoot",
+        "Run",
+        "Jump",
+        "Idle",
+        "AimRaise",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/webp",
+          "bytes": 125050
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 252304
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 27096
+        }
+      ],
+      "animationChannels": 3120
+    }
+  },
+  {
+    "id": "male_scout",
+    "variant": "vertex",
+    "file": "reports/optimization/candidates/male_scout-vertex.glb",
+    "originalBytes": 7973144,
+    "optimizedBytes": 1233464,
+    "before": {
+      "triangles": 19800,
+      "vertices": 28911,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "Shoot",
+        "AimIdle",
+        "AimLower",
+        "Walk",
+        "TripoShoot",
+        "Run",
+        "Jump",
+        "Idle",
+        "AimRaise",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/png",
+          "bytes": 1409260
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 516142
+        },
+        {
+          "mime": "image/png",
+          "bytes": 2561020
+        }
+      ],
+      "animationChannels": 3120
+    },
+    "after": {
+      "triangles": 18172,
+      "vertices": 26890,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "Shoot",
+        "AimIdle",
+        "AimLower",
+        "Walk",
+        "TripoShoot",
+        "Run",
+        "Jump",
+        "Idle",
+        "AimRaise",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [],
+      "animationChannels": 3120
+    }
+  },
+  {
+    "id": "female_striker",
+    "variant": "balanced",
+    "file": "assets/characters/optimized/female_striker.glb",
+    "originalBytes": 8201192,
+    "optimizedBytes": 1762824,
+    "before": {
+      "triangles": 19800,
+      "vertices": 30464,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "AimRaise",
+        "Idle",
+        "Jump",
+        "Run",
+        "TripoShoot",
+        "Walk",
+        "AimLower",
+        "AimIdle",
+        "Shoot",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/png",
+          "bytes": 1189917
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 614447
+        },
+        {
+          "mime": "image/png",
+          "bytes": 2801748
+        }
+      ],
+      "animationChannels": 3120
+    },
+    "after": {
+      "triangles": 18082,
+      "vertices": 28560,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "AimRaise",
+        "Idle",
+        "Jump",
+        "Run",
+        "TripoShoot",
+        "Walk",
+        "AimLower",
+        "AimIdle",
+        "Shoot",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/webp",
+          "bytes": 110482
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 290204
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 39884
+        }
+      ],
+      "animationChannels": 3120
+    }
+  },
+  {
+    "id": "female_striker",
+    "variant": "vertex",
+    "file": "reports/optimization/candidates/female_striker-vertex.glb",
+    "originalBytes": 8201192,
+    "optimizedBytes": 1237984,
+    "before": {
+      "triangles": 19800,
+      "vertices": 30464,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "AimRaise",
+        "Idle",
+        "Jump",
+        "Run",
+        "TripoShoot",
+        "Walk",
+        "AimLower",
+        "AimIdle",
+        "Shoot",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [
+        {
+          "mime": "image/png",
+          "bytes": 1189917
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 614447
+        },
+        {
+          "mime": "image/png",
+          "bytes": 2801748
+        }
+      ],
+      "animationChannels": 3120
+    },
+    "after": {
+      "triangles": 18085,
+      "vertices": 28210,
+      "bones": [
+        65
+      ],
+      "clips": [
+        "AimRaise",
+        "Idle",
+        "Jump",
+        "Run",
+        "TripoShoot",
+        "Walk",
+        "AimLower",
+        "AimIdle",
+        "Shoot",
+        "CrouchIdle",
+        "CrouchWalk",
+        "Roll",
+        "Victory",
+        "Reload",
+        "Hurt",
+        "Death"
+      ],
+      "textures": [],
+      "animationChannels": 3120
+    }
+  }
+]

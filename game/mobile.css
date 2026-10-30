@@ -61,3 +61,5 @@
 @container (max-height:350px){.mobile-layout .game-ui .mission-brief{display:none}.mobile-layout .game-ui .mobile-aim{bottom:calc(var(--edge-bottom) + 140px)}.mobile-layout .game-ui .combat-notice{top:90px}.mobile-layout .game-ui .move-stick{bottom:var(--edge-bottom)}.mobile-layout .game-ui .menu-columns{top:57px}.mobile-layout .game-ui .mode-label{padding-top:8px}.mobile-layout .game-ui .map-option{min-height:48px}.mobile-layout .game-ui .mode-grid button{height:33px}}
 
 .mobile-layout .play-controls.is-menu .perspective-button{top:12px;left:auto;right:108px}
+.mobile-layout .controller-tools:not(.is-menu){top:105px;left:calc(var(--edge-left) + 112px);right:auto}
+.mobile-layout .controller-tools:not(.is-menu) .controller-entry{min-height:36px;font-size:9px;padding:8px}

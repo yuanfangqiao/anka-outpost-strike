@@ -6,7 +6,7 @@
 
 **1.1 更新**：默认第一人称，按 V 或视角按钮切换；加入双方同步的五类地面补给，靠近 / F / 点击拾取；对战地图扩大并增加遮挡，复活优先远离敌人。详见 [本次玩法说明](docs/GAMEPLAY-1.1.md)。
 
-游戏首页为 `index.html`，角色动作实验室为 `characters.html`。已接入你提供的两份 Mixamo FBX，男女角色各有 16 段动画；游戏使用新版 `assets/characters/mixamo/*_aim.glb`。原始 Tripo 资产保留。完整16动作的可编辑源文件为 `source/male_scout_game.blend` 与 `source/female_striker_game.blend`。
+游戏首页为 `index.html`，角色动作实验室为 `characters.html`。已接入你提供的两份 Mixamo FBX，男女角色各有 16 段动画；游戏使用轻量版 `assets/characters/optimized/*.glb`。原始 Mixamo、Tripo 资产保留。完整16动作的可编辑源文件为 `source/male_scout_game.blend` 与 `source/female_striker_game.blend`。
 
 当前是可玩的第一版：四种战场（沙漠、丛林、雪地、都市）、主线三波及三阶段 Boss、生存无限波、AI 合作与 Anka 鉴权双人房间、三分钟 PvP、七种武器、补给、手雷、护盾、救援、小地图、音效、暂停与结算。沙漠基地为首个主场景；环境与机器人为程序构建的低多边形风格，尚未达到概念图的美术精度。真人房间固定两人，通过 Anka WebSocket 转发，扫码免注册加入；邀请 10 分钟有效，兑换后的访客身份独立有效 24 小时。房主统一计算战斗，适用于好友对战。
 
@@ -122,3 +122,6 @@ npm run build
 绑定由宿主 `devices` infra 提供，User / Share / Device 分别鉴权；访客手柄仅控制本人。键鼠或本机游戏触控会挂起手柄，点击手柄入口“继续游戏”恢复。断线/后台/暂停会释放输入，操作不重放。访客提交房主判定的技能返回 submitted，不冒充最终生效。
 
 验证：`npm run test:controller`、`npm run test:game`、`npm run test:online`、`npm run test:fps`。宿主接口、手机调试页和 ESP 独立工程见 Anka 的 `docs/DEVICES.md` 与 `device/esp32/README.md`。
+## 轻量资源版本
+
+当前运行资源已做保守减面、贴图缩小、Meshopt 和默认传输压缩；原始模型另有独立备份。处理与验证方式见 [模型与传输优化](docs/ASSET-OPTIMIZATION.md)。
