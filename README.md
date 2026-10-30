@@ -1,127 +1,133 @@
-# ANKA · 前哨突击（Vue + Three.js）
+# ANKA · 前哨突击
 
-![1793031776170](image/README/1793031776170.png)
+**简体中文** | [English](README.en.md)
 
-**1.2 更新**：第一人称加入枪口火光、飞行曳光与弹道余迹；移动端默认横屏，参照概念图重排摇杆、圆形动作键和底部道具，支持多指移动 / 开火 / 拖动瞄准。详见 [本次玩法说明](docs/GAMEPLAY-1.2.md)。
+<img src="assets/branding/anka-logo-transparent.webp" width="112" alt="ANKA 双人突击 LOGO" />
 
-**1.1 更新**：默认第一人称，按 V 或视角按钮切换；加入双方同步的五类地面补给，靠近 / F / 点击拾取；对战地图扩大并增加遮挡，复活优先远离敌人。详见 [本次玩法说明](docs/GAMEPLAY-1.1.md)。
+基于 **Vue 3、Three.js 和 Vite** 开发的 Q 版 3D 射击游戏，支持第一 / 第三人称、桌面键鼠和手机 / iPad 触控。可独立体验单人玩法，也可作为 Anka 插件进行好友对战。
 
-游戏首页为 `index.html`，角色动作实验室为 `characters.html`。已接入你提供的两份 Mixamo FBX，男女角色各有 16 段动画；游戏使用轻量版 `assets/characters/optimized/*.glb`。原始 Mixamo、Tripo 资产保留。完整16动作的可编辑源文件为 `source/male_scout_game.blend` 与 `source/female_striker_game.blend`。
+![ANKA 前哨突击游戏预览](image/README/1793031776170.webp)
 
-当前是可玩的第一版：四种战场（沙漠、丛林、雪地、都市）、主线三波及三阶段 Boss、生存无限波、AI 合作与 Anka 鉴权双人房间、三分钟 PvP、七种武器、补给、手雷、护盾、救援、小地图、音效、暂停与结算。沙漠基地为首个主场景；环境与机器人为程序构建的低多边形风格，尚未达到概念图的美术精度。真人房间固定两人，通过 Anka WebSocket 转发，扫码免注册加入；邀请 10 分钟有效，兑换后的访客身份独立有效 24 小时。房主统一计算战斗，适用于好友对战。
+## 已实现功能
 
-Anka 安装、邀请、部署与验证见 [接入文档](docs/ANKA-INTEGRATION.md)。
+| 模块 | 功能简述 |
+| --- | --- |
+| 双角色与视角 | 小杰、小葵可选；第一 / 第三人称切换；持枪、瞄准、移动、跳跃等角色动画。 |
+| 地图与模式 | 沙漠基地、丛林遗迹、雪地要塞、未来都市；主线三波战斗与 Boss、生存模式、AI 搭档合作、人机对战。 |
+| 武器与战斗 | 七类武器、换弹、后坐力、枪口火光、曳光与命中效果；手雷、医疗包、护盾、地面补给和搭档救援。 |
+| 战术人机 | 行为树决策、掩体、探头射击、压制与侧翼移动，结合视野 / 遮挡感知和 A* 寻路。 |
+| 好友对战 | Anka 鉴权双人房间、二维码 / 链接邀请、免注册访客加入、准备与同步开局、计分、复活和结算。 |
+| 手机与 iPad | 横屏布局、竖屏旋转适配、多指移动 / 开火 / 转向；全屏空白区域可拖动视角，紧凑血量与比分，右上角视角切换。 |
+| 界面与设备 | 小地图、暂停、画质和音频设置；桌面支持手柄设备接入，手机与 iPad 不显示该入口；游戏内使用透明双人 LOGO。 |
+| 资源与交付 | 两角色各保留 65 根骨骼、16 段动画；运行模型使用 Meshopt / WebP 优化，构建自动生成 Brotli / Gzip 资源。 |
 
-单人开发启动：`npm install` 后运行 `npm run dev`，打开终端打印的本地地址。`npm run build` 生成 `dist/`。
+**对战规则：** 1 对 1，先得 10 分或在 180 秒结束时领先者获胜，同分为平局；倒地 3 秒后复活，保护期 2 秒，开火提前结束保护。默认可直接开始人机对战；真人联机当前为双人 PvP，合作模式使用 AI 搭档。
 
-操作：WASD / 方向键移动，V 切换第一 / 第三人称，第一人称点击画面锁定鼠标转向，左键或 J 射击，右键拖动转视角 / 缩放瞄准，1–7 / 滚轮换枪，R 换弹，Space 跳跃，Shift 翻滚，C 按住蹲伏，Alt 冲刺，G 手雷，E 医疗包，Q 护盾，F 拾取 / 救援，Esc 释放鼠标并暂停单人战斗。触屏提供摇杆、拖动视角、持续开火与动作按钮。补给靠近自动拾取，也可点击提示拾取。
+## 快速开始
 
-检查：`npm run test:game` 检查四地图完整波次和武器/生命逻辑；`npm run validate:aim` 检查两模型的 16 段动画、骨骼与 glTF。检查记录与真实浏览器截图位于 `reports/game/`，动作来源和重定向脚本见 `reports/mixamo/README.md`。自动通关测试是控制器测试，不等同于真人完整通关。
+### 环境要求
 
-在线私有发布的上传步骤被自动审批拦截，尚未上传或上线。`sites/anka-frontline/.openai/hosting.json` 保留已创建但未发布的 Site 身份，避免后续重复创建。
+- **Node.js 22.12+** 与 npm。
+- **Git LFS**：模型、FBX 和 Blender 源文件通过 LFS 管理。
+- 支持 WebGL 2 的浏览器；联机与设备接入另外依赖 Anka 宿主服务。
 
-以下为原始角色制作与 Tripo 资产记录。
-
-两名角色来自已确认的男女三视图，通过 Tripo 国内环境生成模型、贴图、骨骼和动画，随后在本地 Blender 整理为 Three.js 可直接加载的 GLB。
-
-## 双方对战 · 行为树战术人机
-
-现在默认选中“双方对战”，点击“开始对战”即可进行蓝方玩家 VS 红方人机的 1 对 1。选择男角色时人机为女角色，反之亦然；使用现有带贴图角色和持枪动画。
-
-规则：先得 **10 分**获胜，每次击倒得1分；比赛最长 **180秒**，到时按比分判定胜/负/平局。双方倒地3秒后复活，复活保护2秒；玩家开火会提前结束自己的保护。复活时补满弹匣与弹药、恢复医疗包/手雷/护盾，保留本场比分。死亡期间不能用医疗包或手雷绕过复活规则。HUD显示双方比分、剩余时间、对手血条/状态和复活倒计时；小地图标出红方。
-
-人机现在使用轻量行为树，包含响应式优先 Selector 和跨帧记忆 Sequence。支持“进入掩体 → 隐蔽 → 探头射击 → 退回”和“短时压制 → 绕到侧翼 → 换角度开火”。受伤与换弹能抢占低优先级战术，移动超时和战术冷却防止卡墙或重复切换。感知基于视野、遮挡、枪声线索和位置记忆，保留反应延迟与射击误差；A* 负责实际绕障。复活点仍作为公开比赛信息告知人机。结构与限制见 `reports/game/behavior-tree.md`。
-
-检查：`npm run test:ai`（行为树与战术），`npm run test:duel`（命中/爆炸、双方计分、复活/保护、重复寻敌、墙体、10分胜负、时间到平局、暂停、重开清理、四地图导航）；`npm run test:duel:ui` 检查比分与胜负平局界面。结果在 `reports/game/duel-checks.json`，实现为 `game/duel.js` 和 `game/navigation.js`。
-
-## 已完成资产
-
-| 角色 | 游戏 GLB | 三角面 | 骨骼 | 材质 | 贴图 | 文件大小 |
-|---|---|---:|---:|---:|---|---:|
-| 小杰 / Scout | `assets/characters/tripo/male_scout_animated.glb` | 19,800 | 65 | 1 | 三张 2K PBR 贴图，内嵌 | 7.1 MiB |
-| 小葵 / Striker | `assets/characters/tripo/female_striker_animated.glb` | 19,800 | 65 | 1 | 三张 2K PBR 贴图，内嵌 | 7.3 MiB |
-
-每个 GLB 都有五段可独立切换的骨骼动画：`Idle`、`Walk`、`Run`、`Jump`、`Shoot`。使用 Mixamo 兼容骨架。GLB 的 Y 轴向上，正面朝 +Z，单位为米；绑定姿态身高统一为 2 米，脚底作为原点基准。动画为原地动作，由游戏代码控制角色的世界位移、转向和跳跃高度。
-
-## 本地预览
+在项目根目录运行：
 
 ```bash
-npm install
+git lfs install
+git lfs pull
+npm ci
 npm run dev
 ```
 
-游戏首页：`http://127.0.0.1:5173/`。角色实验室：`http://127.0.0.1:5173/characters.html`，支持双人/单人、16 段动作、暂停、正背视角、旋转与线框。
+- 游戏：<http://127.0.0.1:5173/>
+- 角色动作实验室：<http://127.0.0.1:5173/characters.html>
 
-Three.js 加载与动作切换封装在 `demo/characters.js`：
+以终端输出的实际地址为准。角色实验室可单独预览双角色、16 段动作、正背视角和线框。
 
-```js
-import { loadCharacter } from './demo/characters.js';
-
-const scout = await loadCharacter('male');
-scene.add(scout.model);
-scout.play('Run');
-
-// 在游戏主循环中调用：
-scout.update(deltaSeconds);
-// 角色位移与物理逻辑由游戏控制：
-scout.model.position.z += speed * deltaSeconds;
-
-// 不再使用时：
-scout.dispose();
-```
-
-加载相同角色的多个实例时，分别调用加载函数或用 Three.js 的 `SkeletonUtils.clone`，确保每个实例有独立骨架和 AnimationMixer。
-
-## 可编辑文件与来源
-
-- `source/anka_tripo_characters.blend`：双人演示场景，打开即为待机姿态，含各角色五段动作和高清贴图。
-- `source/anka_tripo_male_scout.blend`、`source/anka_tripo_female_striker.blend`：各自独立、可编辑的角色源文件，保留原始高清贴图。
-- `assets/characters/tripo/raw/`：原始静态生成模型和预览。
-- `assets/characters/tripo/tripo-out/`：Tripo 原始骨骼、五段动画 GLB 和每个任务的 `task.json`。
-- `references/tripo/`：实际上传的六张参考图。根据画面朝向，男角色标为右侧视图，女角色标为左侧视图。
-- `output/character-turnarounds/`：原先生成的三视图总览及单视角 PNG。
-- `renders/tripo/`：实际 Blender 模型的待机、跑步、背面渲染，以及 Three.js 预览截图。
-
-Blender 中选择相应角色的骨骼，切换 Action 或对应的 NLA 轨道即可播放五段动作。所有 NLA 轨道默认静音，避免多个动作同时叠加；当前 Action 为 Idle。
-
-## 生成与本地处理
-
-建模：`tripo-v3.1` / `v3.1-20260211`，三视图输入，PBR 高清贴图和 Smart Low-poly。绑定：`rig-v3.0` / `v3.0-20260909`，`spec=mixamo`。动画：五段 Tripo 预设，`animate_in_place=true`，GLB 输出。
-
-Tripo 原始网格分别为 27,654 和 25,273 三角面；本地优化到各 19,800，并保留 UV 与骨骼权重。每顶点最多四个骨骼影响。游戏版贴图整理为 2K，原始高清贴图保留在源文件中。材质保留生成的底色、法线和金属度贴图，粗糙度统一为 0.58。归一化导出切线，修复少数退化 UV 顶点的零切线。
-
-重新制作本地交付文件可使用 `scripts/finalize_tripo_character.py`；导出后运行 `python3 scripts/repair_glb_tangents.py`。这些操作不调用 Tripo，不消耗积分。双人场景和实际渲染由 `scripts/build_tripo_review_scene.py` 构建。
-
-## 验证
+### 构建
 
 ```bash
-npm run validate
-npm run validate:motion
 npm run build
 ```
 
-- Khronos glTF Validator：两份模型均 0 错误，均验证内嵌贴图、骨骼和五个非空动作。
-- Three.js 数据检查：每段动作六个时间点，对全部蒙皮顶点求实际变形范围，检查异常值与失控变形；两角色的 Idle → Run 过渡通过。
-- 浏览器：模型加载成功，五段动作切换已逐项操作确认。
-- 验证器保留一个 `NODE_SKINNED_MESH_NON_ROOT` 警告，来自统一比例/朝向的外层节点。骨骼与网格处于同一外层节点，Three.js 的变形与切换检查已通过。
+产物位于 `dist/`，包含 `build.json` 及预压缩资源。构建先在暂存目录完成，成功后再替换现有产物。`dist/` 与 `node_modules/` 不纳入版本控制。
 
-报告见 `reports/tripo/gltf-validation.json`、`reports/tripo/threejs-motion-check.json`，文件尺寸及 SHA-256 见 `assets/characters/tripo/manifest.json`。
+独立开发服务支持单人玩法；邀请好友、房间同步及手柄接入需要从 Anka 打开。安装、HTTPS / WSS 和部署配置见 [Anka 接入文档](docs/ANKA-INTEGRATION.md)。
 
-## 实际费用
+## 操作说明
 
-男角色：建模 50 + 免费检查 0 + 绑骨 25 + 五动画 50 = **125 积分**。
+### 桌面
 
-女角色：建模 50 + 免费检查 0 + 绑骨 25 + 五动画 50 = **125 积分**。
+| 操作 | 按键 / 输入 |
+| --- | --- |
+| 移动 / 冲刺 | `WASD` 或方向键 / 左 `Alt` |
+| 射击 / 瞄准 | 鼠标左键或 `J` / 鼠标右键 |
+| 转动视角 | 第一人称点击画面锁定鼠标后移动；也可按住右键拖动 |
+| 切换视角 / 武器 | `V` / `1–7` 或滚轮 |
+| 换弹 / 跳跃 / 翻滚 | `R` / `Space` / `Shift` |
+| 蹲伏 | 按住 `C` |
+| 手雷 / 医疗包 / 护盾 | `G` / `E` / `Q` |
+| 拾取 / 救援 | `F`；补给也可靠近自动拾取或点击提示 |
+| 暂停 / 继续 | `Esc`；暂停时释放鼠标锁定 |
 
-总计 **250 积分**，余额从 600 变为 **350 积分**，冻结积分为 0。每项任务的完整 Task ID 和实际扣费记录在 `reports/tripo/cost-report.md`。所有生成均在国内环境 `cn` 完成，没有读取或写入项目 API Key。
+### 手机与 iPad
 
-## 扫码手柄
+左下摇杆移动，所有空白区域均可拖动转向；右侧提供开火、瞄准与动作按钮。按住开火连续射击，拖动开火键可同时转向；支持多指操作，点击换枪展开武器列表。视角切换位于右上角，暂停时隐藏。
 
-游戏右上角“手柄设备接入”为当前玩家绑定手机或 ESP-Mosaico；每人只接入一个设备。手机扫码直接打开独立网页，ESP 打开手柄应用后扫码。双主键为瞄准/开火；九宫格滑动移动、短点功能，中间圆形跳跃。跳跃绿框在线、红框离线。
+开始游戏时尝试全屏与横屏锁定；浏览器不支持方向锁定时使用旋转布局。暂停、触控取消或屏幕方向变化会释放持续输入。手机与 iPad 不加载手柄接入组件；桌面设备接入使用 Anka 的设备服务。
 
-绑定由宿主 `devices` infra 提供，User / Share / Device 分别鉴权；访客手柄仅控制本人。键鼠或本机游戏触控会挂起手柄，点击手柄入口“继续游戏”恢复。断线/后台/暂停会释放输入，操作不重放。访客提交房主判定的技能返回 submitted，不冒充最终生效。
+## 开发与验证
 
-验证：`npm run test:controller`、`npm run test:game`、`npm run test:online`、`npm run test:fps`。宿主接口、手机调试页和 ESP 独立工程见 Anka 的 `docs/DEVICES.md` 与 `device/esp32/README.md`。
-## 轻量资源版本
+| 命令 | 用途 |
+| --- | --- |
+| `npm run dev` | 启动本地开发服务 |
+| `npm run build` | 构建游戏和角色实验室 |
+| `npm run test:game` | 地图波次、武器、生命值与基础战斗逻辑 |
+| `npm run test:duel` / `npm run test:ai` | 对战计分、复活、战术人机与导航 |
+| `npm run test:online` | 联机战斗与同步逻辑 |
+| `npm run test:fps` / `npm run test:shots` | 第一人称补给、枪口与弹道效果 |
+| `npm run test:controller` | 设备输入路由、释放与控制权切换 |
+| `npm run test:models` / `npm run validate:aim` | 优化模型、动画与骨骼验证 |
+| `npm run test:mobile` | 浏览器触摸、多指操作、全屏转向区域与旋转适配 |
 
-当前运行资源已做保守减面、贴图缩小、Meshopt 和默认传输压缩；原始模型另有独立备份。处理与验证方式见 [模型与传输优化](docs/ASSET-OPTIMIZATION.md)。
+移动端浏览器验证需先运行 `npm run dev`，并准备 Playwright 使用的 Chromium：
+
+```bash
+npx playwright install chromium
+npm run test:mobile
+```
+
+可通过 `ANKA_QA_URL` 指定开发地址，或通过 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` 指定已有的 Chromium。真人房间端到端验证见 [Anka 接入文档](docs/ANKA-INTEGRATION.md)，模型视觉与传输验证见 [资源优化文档](docs/ASSET-OPTIMIZATION.md)。报告通常输出到 `reports/`；浏览器设备模拟不等同于 iOS / Android 真机验收。
+
+## 项目结构
+
+```text
+├── game/                   # Vue 界面、游戏循环、角色、战斗与输入
+│   ├── engine.js           # 场景和玩法调度
+│   ├── duel-brain.js       # 战术人机；行为树与导航见同目录模块
+│   ├── network.js          # Anka 房间与 WebSocket 传输
+│   └── mobile.css          # 手机 / iPad 布局
+├── assets/
+│   ├── characters/         # 运行模型及 Tripo / Mixamo 资产
+│   └── branding/           # 透明 LOGO、蓝黑底应用图标与设计方案
+├── demo/                   # 角色动作实验室
+├── server/                 # Anka 插件后端定义
+├── web/                    # Anka 宿主入口
+├── source/                 # 可编辑 Blender 源文件与模型备份
+├── scripts/                # 构建、资源处理与验证工具
+├── docs/                   # 接入、玩法与优化说明
+└── reports/                # 模型、动画、测试与制作记录
+```
+
+## 资源与技术文档
+
+- [Anka 安装、邀请与部署](docs/ANKA-INTEGRATION.md)
+- [模型与传输优化](docs/ASSET-OPTIMIZATION.md)
+- [行为树结构与限制](reports/game/behavior-tree.md)
+- [Mixamo 动作重定向](reports/mixamo/README.md)
+- [Tripo 制作费用与任务记录](reports/tripo/cost-report.md)
+- [LOGO 与应用图标资源](assets/branding/README.md)：游戏内使用透明版，蓝黑底原图保留用于后续 ANKA 应用图标。
+- 历史玩法说明：[1.1](docs/GAMEPLAY-1.1.md) · [1.2](docs/GAMEPLAY-1.2.md)
+
+游戏与角色实验室均加载 `assets/characters/optimized/`。原始 Tripo / Mixamo 模型与 Blender 文件独立保留，旧版五段动画资产不代表当前运行模型的完整动作集。环境与机器人采用程序化低多边形风格；当前版本面向单人体验和好友对战，联机战斗由房主裁定。
