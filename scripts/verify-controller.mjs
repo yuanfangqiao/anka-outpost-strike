@@ -60,7 +60,7 @@ pose.apply({id:1,q:q(0,1.5)});assert.equal(view.lookPitch,1.25);
 pose.apply({id:1,q:[1,0,0,0]});assert.equal(view.lookPitch,.1,'pitch limit must not accumulate an offset');
 for(const yaw of [.5,2,3.5,5,Math.PI*2])pose.apply({id:1,q:q(1,yaw)});
 assert.ok(Math.abs(view.lookYaw-.3)<1e-8,'full yaw circle returns to anchor even after omitted packets');
-pose.apply({id:1,q:q(1,.2)});assert.ok(view.lookYaw<.3,'retain existing gyro direction');
+pose.apply({id:1,q:q(1,.2)});assert.ok(Math.abs(view.lookYaw-(.3+.2))<1e-8,'gyro heading must follow the pose without mirroring');
 pose.apply({id:1,q:[1,0,0,0]},{yaw:10,pitch:0});
 pose.apply({id:1,q:q(1,.3)});pose.apply({id:1,q:[1,0,0,0]});
 assert.ok(Math.abs(view.lookYaw-(.3-10*Math.PI/180))<1e-8,'touch look changes the anchor');
@@ -75,7 +75,7 @@ for(const degrees of [0,45,85,89.99,90,90.01,95,120,170,179]){
 }
 pose.apply({id:2,q:[1,0,0,0]});assert.ok(Math.abs(view.lookPitch-.1)<1e-8);
 pose.rebase();view.lookYaw=.3;view.lookPitch=.1;
-pose.apply({id:3,q:q(1,.5)});assert.ok(Math.abs(view.lookYaw-(.3-.5))<1e-8,'late first pose keeps its complete rotation');
+pose.apply({id:3,q:q(1,.5)});assert.ok(Math.abs(view.lookYaw-(.3+.5))<1e-8,'late first pose keeps its complete rotation');
 const current=view.lookYaw;pose.rebase(true);pose.apply({id:3,q:q(1,.7)});
 assert.ok(Math.abs(view.lookYaw-current)<1e-8,'explicit keyboard handback may align to current grip');
 pose.rebase();view.lookYaw=.3;view.lookPitch=.1;
@@ -90,11 +90,23 @@ for(const sign of [-1,1]){
  for(const degrees of [30,85,89.99,90,90.01,100,120,170,120,90,60,0]){
   const pitch=sign*degrees*Math.PI/180,rotation=mul(mul(q(1,.4),q(0,pitch)),q(2,.2));
   pose.apply({id:5,q:rotation});
-  assert.ok(Math.abs(view.lookYaw-(.3-.4))<1e-4,'combined roll/pitch cannot reverse heading at vertical');
+  assert.ok(Math.abs(view.lookYaw-(.3+.4))<1e-4,'combined roll/pitch cannot reverse heading at vertical');
   assert.ok(Math.abs(view.lookPitch-Math.max(-1.25,Math.min(1.25,pitch)))<1e-4);
  }
 }
 console.log('Controller compound pose checks passed: positive/negative vertical crossings with heading and roll.');
+
+// Both horizontal directions retain the pose sign; vertical controls and gain stay intact.
+for(const perspective of ['first','third'])for(const gain of [1,2])for(const sign of [-1,1]){
+ const camera={lookYaw:.3,lookPitch:.1,state:{perspective}},gyro=new ControllerPose(camera);
+ gyro.apply({id:1,q:[1,0,0,0],gain});
+ gyro.apply({id:1,q:mul(q(1,sign*.2),q(0,sign*.1)),gain});
+ assert.ok(Math.abs(camera.lookYaw-(.3+sign*.2*gain))<1e-8,'horizontal gyro follows both pose directions in either view');
+ assert.ok(Math.abs(camera.lookPitch-(.1+sign*.1*gain))<1e-8,'horizontal fix preserves up/down gyro and sensitivity');
+ gyro.apply({id:1,q:[1,0,0,0],gain});
+ assert.ok(Math.abs(camera.lookYaw-.3)<1e-8&&Math.abs(camera.lookPitch-.1)<1e-8,'returning the phone restores the calibrated view');
+}
+console.log('Controller gyro direction checks passed: both directions, perspectives, gain, pitch and calibration return.');
 
 // Closed 3D paths can end in an equivalent nonzero Euler chart unless reference is canonical.
 let seed=7;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};

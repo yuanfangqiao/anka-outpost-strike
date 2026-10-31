@@ -29,7 +29,8 @@ export class ControllerPose {
   const g=this.game,scale=pose.gain??1,newReference=this.lastId!==pose.id;
   if(newReference)this.angles={yaw:0,pitch:0,roll:0};
   this.angles=angles(pose.q,this.angles||{yaw:0,pitch:0,roll:0});
-  const yaw=-this.angles.yaw*scale,pitch=this.angles.pitch*scale;
+  // Relative pose heading shares the game's yaw sign; negating it mirrors left/right.
+  const yaw=this.angles.yaw*scale,pitch=this.angles.pitch*scale;
   if(!this.anchor||this.anchor.id!==pose.id){
    // A delayed first packet is already relative to calibration: do not swallow its rotation.
    const align=this.alignCurrent&&!newReference;
