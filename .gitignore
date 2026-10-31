@@ -62,3 +62,7 @@ reports/optimization/candidates/
 reports/optimization/visuals/
 reports/optimization/mobile/
 reports/optimization/baked/
+
+# tmp
+assets/concepts/homebound/
+assets/concepts/neon-escape/
