@@ -203,6 +203,8 @@ const mapIcon = id => ({ desert:'mountain', jungle:'tree', snow:'snow', city:'ci
 </style>
 
 <style>
+/* Keep the desktop score panel centered while halving its visible area. */
+.game-root:not(.mobile-layout) .game-ui .duel-scoreboard{left:50%;transform:translateX(-50%) scale(.70710678);transform-origin:top center}
 /* Menu and desktop battle actions use a shared row; touch controls keep their HUD positions. */
 .game-ui .menu-header{z-index:5}
 .game-ui .menu-header>.top-status{display:none}
