@@ -4,23 +4,25 @@ import { WEAPONS } from './config.js';
 import { NavigationGrid } from './navigation.js';
 import { act, explosion, vector } from './online-combat.js';
 import { chooseSpawn } from './arena-layout.js';
-import { SupplyField, SUPPLY_NAMES } from './supplies.js';
+import { SUPPLY_NAMES } from './supplies.js';
+import { missionSnapshot, receiveMission } from './online-mission.js';
 const point=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const inventory=()=>WEAPONS.map(w=>({ammo:w.mag,reserve:w.reserve}));
 
 export class OnlineDuel{
  constructor(game,room){
   this.game=game;this.room=room;this.net=game.network;this.host=this.net.isHost;
+  this.versus=!room.mode||room.mode==='versus';this.waitingForState=!this.host;
   this.local=this.net.localId;this.players={};this.seq=0;this.received=-1;this.timer=0;this.ended=false;
-  this.nav=new NavigationGrid(game.world);game.waveDelay=0;game.pendingSpawns=[];
-  this.supplies=new SupplyField(game);game.supplies=this.supplies;
+  this.nav=new NavigationGrid(game.world);if(this.versus)game.waveDelay=0;
+  this.supplies=game.supplies;
   for(const [id,info]of Object.entries(room.players)){
    this.players[id]={id,name:info.name,kind:info.character,hp:120,shield:0,kills:0,deaths:0,
     p:[],yaw:0,moving:false,crouching:false,weapon:0,inventory:inventory(),medkits:3,grenades:3,shieldCharges:2,
     protection:2,immunity:0,respawn:0,reload:0,spawn:0,lastShot:-100,lastGrenade:-100,lastRoll:-100,lastMove:game.now};
   }
   Object.values(this.players).forEach((p,i)=>this.spawn(p,i));
-  game.roundTimer=room.rules.duration;game.online=this;this.publish();
+  game.roundTimer=room.rules.duration||0;game.online=this;this.publish();
  }
  spawn(p,index){
   const g=this.game,others=Object.values(this.players).filter(q=>q!==p&&q.p.length);
@@ -71,50 +73,88 @@ export class OnlineDuel{
     if(payload.players.length!==2||!payload.players.every(p=>this.players[p.id]&&vector(p.p)&&Number.isFinite(p.hp)&&p.hp>=0&&p.hp<=120))return;
     this.received=payload.seq;
     for(const data of payload.players){const previous=this.players[data.id];this.players[data.id]={...previous,...data};
-     if(data.id===this.local){if(data.spawn!==previous.spawn)this.positionLocal(data);else if(point(...data.p).distanceTo(this.game.player.group.position)>1.8)this.game.player.group.position.lerp(point(...data.p),.5);}}
-    if(Number.isFinite(payload.remaining))this.game.roundTimer=Math.max(0,payload.remaining);this.supplies.receive(payload.supplies);this.publish();
+     if(data.id===this.local){if(data.spawn!==previous.spawn)this.positionLocal(data);else if(this.waitingForState)this.game.player.group.position.fromArray(data.p);else if(point(...data.p).distanceTo(this.game.player.group.position)>1.8)this.game.player.group.position.lerp(point(...data.p),.5);}}
+    if(this.versus&&Number.isFinite(payload.remaining))this.game.roundTimer=Math.max(0,payload.remaining);
+    if(!this.versus&&payload.mission)receiveMission(this.game,payload.mission);
+    this.supplies.receive(payload.supplies);this.publish();
+    if(this.waitingForState){
+     this.waitingForState=false;
+     if(!this.ended){this.game.state.phase='playing';this.game.emit();}
+    }
    }else if(payload.type==='pvp-effect')this.showEffect(payload);
-   else if(payload.type==='pvp-finish'&&payload.scores){for(const p of Object.values(this.players))p.kills=payload.scores[p.id]||0;this.finish(true);}
+   else if(payload.type==='pvp-finish')this.applyResult(this.versus?payload.scores:payload.win);
   }
  }
  tick(dt){
   const g=this.game,local=this.players[this.local];if(this.ended)return;
   if(this.host){
-   if(this.net.now&&this.room.starts_at>0)g.roundTimer=Math.max(0,this.room.rules.duration-(this.net.now()-this.room.starts_at-(this.room.paused_total||0)));
+   if(this.versus&&this.net.now&&this.room.starts_at>0){
+    g.roundTimer=Math.max(0,this.room.rules.duration-(this.net.now()-this.room.starts_at-(this.room.paused_total||0)));
+    if(g.roundTimer===0){this.finish();return;}
+   }
    local.p=g.player.group.position.toArray();local.yaw=g.lookYaw;local.moving=g.moving;local.weapon=g.state.weapon;local.crouching=g.keys.has('KeyC');
    for(const p of Object.values(this.players)){
     p.protection=Math.max(0,p.protection-dt);p.immunity=Math.max(0,p.immunity-dt);
-    if(p.hp<=0){p.respawn=Math.max(0,p.respawn-dt);if(p.respawn===0)this.spawn(p);}
+    if(p.hp<=0&&this.room.mode!=='coop'){p.respawn=Math.max(0,p.respawn-dt);if(p.respawn===0)this.spawn(p);}
     if(p.reload>0){p.reload=Math.max(0,p.reload-dt);if(p.reload===0){const item=p.inventory[p.reloadWeapon],amount=Math.min(WEAPONS[p.reloadWeapon].mag-item.ammo,item.reserve);item.ammo+=amount;item.reserve-=amount;}}
    }
    this.supplies.authoritative(dt,this.players,(node,p)=>this.effect({kind:'pickup',supply:node.kind,player:p.id,p:node.mesh.position.toArray()}));
   }
   this.publish();this.timer-=dt;if(this.timer>0)return;this.timer=.05;
-  if(this.host)this.net.broadcast({type:'pvp-state',seq:++this.seq,remaining:g.roundTimer,players:Object.values(this.players),supplies:this.supplies.snapshot()});
+  if(this.host)this.net.broadcast({type:'pvp-state',seq:++this.seq,remaining:g.roundTimer,players:Object.values(this.players),supplies:this.supplies.snapshot(),
+   ...(!this.versus&&{mission:missionSnapshot(g)})});
   else this.net.send({type:'player',p:g.player.group.position.toArray(),yaw:g.lookYaw,moving:g.moving,crouching:g.keys.has('KeyC'),weapon:g.state.weapon});
  }
  publish(){
   const g=this.game,local=this.players[this.local],enemy=Object.values(this.players).find(p=>p.id!==this.local);if(!enemy||!local)return;
-  const before=g.state.hp;Object.assign(g.state,{hp:local.hp,shield:local.shield,kills:local.kills,deaths:local.deaths,score:local.kills*100,grenades:local.grenades,medkits:local.medkits,shieldCharges:local.shieldCharges,reloading:local.reload/(WEAPONS[local.reloadWeapon||0].reload),message:'好友对战 · 先得 10 分或三分钟内领先获胜'});
+  const before=g.state.hp;Object.assign(g.state,{hp:local.hp,shield:local.shield,deaths:local.deaths,grenades:local.grenades,medkits:local.medkits,shieldCharges:local.shieldCharges,reloading:local.reload/(WEAPONS[local.reloadWeapon||0].reload)});
   if(before>local.hp){g.fx.damage();g.player.hurtTime=.25;}
   g.inventory=local.inventory;g.selectInventory();g.deadTimer=local.respawn;g.invulnerable=Math.max(local.protection,local.immunity);
   let remote=g.remotes.get(enemy.id);
   if(!remote){const actor=g.createDuelActor(enemy.kind);g.scene.add(actor.group);remote={actor,target:point(...enemy.p)};actor.group.position.fromArray(enemy.p);g.remotes.set(enemy.id,remote);}
   Object.assign(remote,{hp:enemy.hp,dead:enemy.hp<=0,moving:enemy.moving,yaw:enemy.yaw});remote.target.fromArray(enemy.p);remote.actor.setWeapon(WEAPONS[enemy.weapon]?.id||'rifle');
+  if(!this.versus){
+   this.partner={name:enemy.name,hp:enemy.hp,maxHp:120};
+   g.state.revive=this.room.mode==='coop'&&local.hp>0&&enemy.hp<=0&&point(...enemy.p).distanceTo(g.player.group.position)<3;
+   return;
+  }
+  Object.assign(g.state,{kills:local.kills,score:local.kills*100,message:'好友对战 · 先得 10 分或三分钟内领先获胜'});
   const projected=remote.actor.group.position.clone().add(point(0,2.25,0)).project(g.camera);
   g.state.elapsed=this.room.rules.duration-g.roundTimer;
   g.state.duel={aiType:'online',localRole:this.host?'host':'guest',playerKills:local.kills,botKills:enemy.kills,target:this.room.rules.target,
    opponentName:enemy.name,opponentHp:enemy.hp,opponentProtected:enemy.protection>0,opponentRespawn:Math.ceil(enemy.respawn),opponentState:enemy.hp<=0?'等待复活':'真人对战',respawn:Math.ceil(local.respawn),result:this.result,
    label:{x:(projected.x+1)*50,y:(1-projected.y)*50,visible:enemy.hp>0&&!g.blocked(g.camera.position,remote.actor.group.position.clone().add(point(0,1.6,0)))&&projected.z>-1&&projected.z<1&&Math.abs(projected.x)<.96&&Math.abs(projected.y)<.95}};
  }
- finish(remote=false){
-  if(this.ended||(!this.host&&!remote))return;this.ended=true;
-  const local=this.players[this.local],other=Object.values(this.players).find(p=>p.id!==this.local);
-  this.result=local.kills===other.kills?'draw':local.kills>other.kills?'win':'lose';
-  const g=this.game;this.publish();g.state.phase=this.result==='lose'?'defeat':'victory';g.heldFire=false;g.keys.clear();document.exitPointerLock?.();g.emit();
-  if(this.host){this.net.broadcast({type:'pvp-finish',scores:Object.fromEntries(Object.values(this.players).map(p=>[p.id,p.kills]))});
-   this.net.command('finished',{round:this.room.round}).catch(console.error);}
+ finish(win=false){
+  if(this.ended||!this.host)return;
+  const result=this.versus?Object.fromEntries(Object.values(this.players).map(p=>[p.id,p.kills])):win;
+  this.applyResult(result);
+  this.net.broadcast(this.versus?{type:'pvp-finish',scores:result}:{type:'pvp-finish',win:result});
+  this.confirmFinish();
+ }
+ applyResult(result){
+  if(this.ended)return;
+  if(this.versus){
+   if(!result||!Object.values(this.players).every(p=>Number.isInteger(result[p.id])))return;
+   for(const p of Object.values(this.players))p.kills=result[p.id];
+   const local=this.players[this.local],other=Object.values(this.players).find(p=>p.id!==this.local);
+   this.result=local.kills===other.kills?'draw':local.kills>other.kills?'win':'lose';
+  }else{
+   if(typeof result!=='boolean')return;
+   this.result=result?'win':'lose';
+  }
+  this.ended=true;this.finalResult=result;this.waitingForState=false;
+  const g=this.game;this.publish();
+  if(!this.versus)g.state.message=result?'行动完成，小队凯旋':'任务失败，重新集结';
+  g.state.phase=this.result==='lose'?'defeat':'victory';g.heldFire=false;g.keys.clear();document.exitPointerLock?.();g.emit();
+ }
+ confirmFinish(){
+  if(!this.host||this.finalResult==null||this.confirming||this.room.phase!=='playing'||!this.net.connected)return;
+  this.confirming=true;
+  this.net.command('finished',{round:this.room.round,result:this.finalResult})
+   .catch(()=>{if(this.game.online===this)this.finishRetry=setTimeout(()=>this.confirmFinish(),1500);})
+   .finally(()=>{this.confirming=false;});
  }
  explode(projectile){explosion(this,projectile);}
- dispose(){this.ended=true;}
+ dispose(){this.ended=true;clearTimeout(this.finishRetry);}
 }

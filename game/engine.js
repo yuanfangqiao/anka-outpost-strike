@@ -43,7 +43,7 @@ export class AnkaGame {
    this.buddy=new GameActor('female');this.scene.add(this.buddy.group);this.buddy.group.position.set(-.8,0,5);this.buddy.group.rotation.y=Math.PI;
    this.state.phase='menu';this.state.message='小队已就绪';this.emit();
   }catch(error){this.state.phase='error';this.state.message=error.message;this.emit();console.error(error);}}
- emit(){this.state.aiming=this.keys.has('MouseRight');this.state.crouching=this.keys.has('KeyC');this.state.aimX=(this.aimNdc.x+1)*50;this.state.aimY=(1-this.aimNdc.y)*50;this.duel?.publish();this.state.partner=this.buddy?{name:this.buddy.kind==='male'?'小杰':'小葵',hp:this.buddy.hp??120,maxHp:120}:null;this.state.damagePulse=this.fx.damagePulse;this.state.roundTime=Math.ceil(this.roundTimer);this.onState({...this.state,weaponInfo:WEAPONS[this.state.weapon]});}
+ emit(){this.state.aiming=this.keys.has('MouseRight');this.state.crouching=this.keys.has('KeyC');this.state.aimX=(this.aimNdc.x+1)*50;this.state.aimY=(1-this.aimNdc.y)*50;this.duel?.publish();this.state.partner=this.online?.partner||(this.buddy?{name:this.buddy.kind==='male'?'小杰':'小葵',hp:this.buddy.hp??120,maxHp:120}:null);this.state.damagePulse=this.fx.damagePulse;this.state.roundTime=Math.ceil(this.roundTimer);this.onState({...this.state,weaponInfo:WEAPONS[this.state.weapon]});}
  listen(target,name,fn,opts){target.addEventListener(name,fn,opts);this.listeners.push(()=>target.removeEventListener(name,fn,opts));}
  resize(){const w=this.container.clientWidth,h=this.container.clientHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
  bindInput(){
@@ -76,15 +76,15 @@ export class AnkaGame {
   await this.ready;this.roundId=config.session||globalThis.crypto?.randomUUID?.()||String(Date.now());this.fx.unlockAudio();this.keys.clear();this.heldFire=false;this.touchMove={x:0,y:0};
   this.clearBattle();if((config.map&&config.map!==this.state.map)||this.world.duel!==((config.mode||'story')==='versus'))this.setWorld(config.map||this.state.map,config.mode||'story');
   const kind=config.character||this.state.character;if(kind!==this.player.kind)this.replacePlayer(kind);
-  this.state={...this.state,phase:'playing',mode:config.mode||'story',character:kind,hp:120,shield:0,weapon:0,reloading:0,grenades:3,medkits:3,shieldCharges:2,wave:0,kills:0,deaths:0,score:0,elapsed:0,boss:null,remaining:0,goal:0,hit:false,combo:0,notice:'',message:`${MAPS.find(m=>m.id===this.state.map)?.name||'前线'} · 清除机械威胁`};
+  this.state={...this.state,phase:config.online?'waiting':'playing',mode:config.mode||'story',character:kind,hp:120,shield:0,weapon:0,reloading:0,grenades:3,medkits:3,shieldCharges:2,wave:0,kills:0,deaths:0,score:0,elapsed:0,boss:null,remaining:0,goal:0,hit:false,combo:0,notice:'',message:`${MAPS.find(m=>m.id===this.state.map)?.name||'前线'} · 清除机械威胁`};
   this.matchScores={};this.inventory=WEAPONS.map(w=>({ammo:w.mag,reserve:w.reserve}));this.selectInventory();
   this.player.group.position.copy(this.world.playerSpawn);if(this.network?.connected)this.player.group.position.x+=Math.max(0,(this.members||[]).indexOf(this.network.localId))*1.6;this.player.group.rotation.y=Math.PI;this.aimNdc.set(0,0);this.player.setWeapon('rifle');this.lookYaw=Math.PI;this.lookPitch=-.035;
   this.velocityY=0;this.grounded=true;this.rollLeft=0;this.reloadLeft=0;this.invulnerable=2;this.fireCooldown=0;this.deadTimer=0;this.roundTimer=180;this.waveDelay=2;this.camera.position.copy(this.world.playerSpawn).add(v3(.95,2.75,5.9));
   if(this.buddy)this.buddy.dispose();this.buddy=null;
-  if(this.state.mode==='coop'&&!this.network?.connected){this.buddy=new GameActor(kind==='male'?'female':'male');this.buddy.hp=120;this.buddy.cooldown=0;this.buddy.down=0;this.buddy.group.position.copy(this.player.group.position).add(v3(1.5,0,1.8));this.scene.add(this.buddy.group);}
-  this.placePickups();if(this.state.mode==='versus'&&!this.network?.connected)this.duel=new RuleDuel(this,kind=>this.createDuelActor(kind));this.emit();this.sendSession();
+  if(this.state.mode==='coop'&&!config.online&&!this.network?.connected){this.buddy=new GameActor(kind==='male'?'female':'male');this.buddy.hp=120;this.buddy.cooldown=0;this.buddy.down=0;this.buddy.group.position.copy(this.player.group.position).add(v3(1.5,0,1.8));this.scene.add(this.buddy.group);}
+  this.placePickups();if(this.state.mode==='versus'&&!config.online&&!this.network?.connected)this.duel=new RuleDuel(this,kind=>this.createDuelActor(kind));this.emit();this.sendSession();
  }
- clearBattle(){this.duel?.dispose();this.duel=null;this.state.duel=null;this.state.pickup=null;this.supplies=null;for(const e of this.enemies)e.mesh.removeFromParent();for(const p of this.pickups)p.mesh.removeFromParent();for(const p of this.projectiles)p.mesh.removeFromParent();for(const t of this.telegraphs)t.mesh.removeFromParent();this.enemies=[];this.pickups=[];this.projectiles=[];this.telegraphs=[];this.pendingSpawns=[];this.waveDelay=0;for(const r of this.remotes.values())r.actor.dispose();this.remotes.clear();}
+ clearBattle(){this.duel?.dispose();this.duel=null;this.state.duel=null;this.state.pickup=null;this.state.revive=false;this.supplies=null;for(const e of this.enemies)e.mesh.removeFromParent();for(const p of this.pickups)p.mesh.removeFromParent();for(const p of this.projectiles)p.mesh.removeFromParent();for(const t of this.telegraphs){t.mesh.removeFromParent();t.mesh.geometry.dispose();t.mesh.material.dispose();}this.enemies=[];this.pickups=[];this.projectiles=[];this.telegraphs=[];this.pendingSpawns=[];this.waveDelay=0;for(const r of this.remotes.values())r.actor.dispose();this.remotes.clear();}
  toMenu(){this.state.phase='menu';this.keys.clear();this.heldFire=false;document.exitPointerLock?.();this.clearBattle();this.player.dead=false;this.player.group.position.set(1,0,5.4);if(!this.buddy){this.buddy=new GameActor(this.player.kind==='male'?'female':'male');this.scene.add(this.buddy.group);}this.buddy.group.position.set(-.8,0,5);this.emit();}
  pause(){this.state.phase='paused';this.heldFire=false;document.exitPointerLock?.();this.emit();}
  resume(){this.state.phase='playing';this.keys.clear();this.sendSession();this.emit();}
@@ -172,7 +172,7 @@ export class AnkaGame {
   if(enemy.kind==='shield'&&origin){const forward=v3(0,0,1).applyQuaternion(enemy.mesh.quaternion),toward=origin.clone().sub(enemy.mesh.position).normalize();if(forward.dot(toward)>.35)amount*=.28;}
   enemy.hp-=amount;enemy.hitFlash=.09;
   if(enemy.hp<=0){this.fx.explosion(enemy.mesh.position.clone().add(v3(0,.7,0)),{radius:enemy.kind==='boss'?4:1.2});enemy.mesh.removeFromParent();this.state.kills++;this.state.combo=this.comboTime>0?this.state.combo+1:1;this.comboTime=2.6;this.state.score+=ENEMIES[enemy.kind].score*(1+Math.min(4,this.state.combo-1)*.15);
-   if(Math.random()<.28)this.addPickup(Math.random()<.45?'health':'ammo',enemy.mesh.position);
+   if(!this.online&&Math.random()<.28)this.addPickup(Math.random()<.45?'health':'ammo',enemy.mesh.position);
    if(enemy.kind==='boss'){this.state.boss=null;this.notice('战争机甲已摧毁！');}
   }
  }
@@ -197,7 +197,14 @@ export class AnkaGame {
   const available=wave===1?['walker','walker','drone','bomber']:['walker','sniper','drone','bomber','shield','elite'];
   this.pendingSpawns=Array.from({length:count},(_,i)=>available[(i+wave)%available.length]);if(boss)this.pendingSpawns.unshift('boss');
   this.state.goal=this.pendingSpawns.length;this.state.remaining=this.pendingSpawns.length;this.spawnTimer=.4;this.state.message=boss?'警报：战争机甲进入战场':`第 ${wave} 波 · 清除机器军团`;this.notice(boss?'BOSS APPROACHING':`WAVE ${String(wave).padStart(2,'0')}`);
-  if(wave>1){this.state.hp=Math.min(120,this.state.hp+18);this.state.grenades=Math.min(6,this.state.grenades+1);}
+  if(wave>1){
+   const players=this.online?Object.values(this.online.players):[this.state];
+   for(const player of players){
+    if(this.online&&player.hp<=0)continue;
+    player.hp=Math.min(120,player.hp+18);player.grenades=Math.min(6,player.grenades+1);
+   }
+   this.online?.publish();
+  }
  }
  makeEnemy(kind,position,id=null){const cfg=ENEMIES[kind]||ENEMIES.walker,mesh=createRobot(kind);mesh.position.copy(position);if(kind==='drone')mesh.position.y=1.7;this.scene.add(mesh);const e={id:id||this.nextEnemy++,kind,mesh,hp:cfg.hp*(1+Math.max(0,this.state.wave-1)*.12),maxHp:cfg.hp*(1+Math.max(0,this.state.wave-1)*.12),cooldown:1+Math.random(),phase:1,attackTimer:0,hitFlash:0};this.enemies.push(e);return e;}
  spawnEnemy(kind){const points=this.world.enemySpawns.filter(p=>flatDistance(p,this.player.group.position)>10);const p=(points.length?points:this.world.enemySpawns)[Math.floor(Math.random()*(points.length||this.world.enemySpawns.length))].clone();if(kind==='boss')p.set(0,0,-10);this.makeEnemy(kind,p);}
@@ -263,7 +270,7 @@ export class AnkaGame {
    if((hit&&p.kind!=='grenade')||p.life<=0){this.explode(p);p.dead=true;p.mesh.removeFromParent();}
    else if(hit&&p.kind==='grenade'){p.mesh.position.y=Math.max(.15,p.mesh.position.y);p.velocity.y=Math.abs(p.velocity.y)*.45;p.velocity.x*=.65;p.velocity.z*=.65;}
   }this.projectiles=this.projectiles.filter(p=>!p.dead);
-  for(const t of this.telegraphs){t.life-=dt;t.mesh.material.opacity=.3+.5*Math.sin(this.now*18)**2;if(t.life<=0){this.fx.explosion(t.mesh.position,{radius:t.radius});if(flatDistance(t.mesh.position,this.player.group.position)<t.radius)this.takeDamage(t.damage);t.mesh.removeFromParent();t.mesh.geometry.dispose();t.mesh.material.dispose();}}
+  for(const t of this.telegraphs){t.life-=dt;t.mesh.material.opacity=.3+.5*Math.sin(this.now*18)**2;if(t.life<=0){this.fx.explosion(t.mesh.position,{radius:t.radius});if(this.online&&!this.online.versus){for(const p of Object.values(this.online.players))if(flatDistance(t.mesh.position,v3(...p.p))<t.radius)this.damageTarget(p.id,t.damage);}else if(flatDistance(t.mesh.position,this.player.group.position)<t.radius)this.takeDamage(t.damage);t.mesh.removeFromParent();t.mesh.geometry.dispose();t.mesh.material.dispose();}}
   this.telegraphs=this.telegraphs.filter(t=>t.life>0);
  }
  updatePickups(dt){this.supplies?.offline(dt);}
@@ -283,7 +290,7 @@ export class AnkaGame {
     if(!(this.state.mode==='versus'&&this.network?.connected)&&this.state.wave>0&&!this.enemies.length&&!this.pendingSpawns.length&&this.waveDelay<=0){if((this.state.mode==='story'||this.state.mode==='coop')&&this.state.wave>=3)this.finish(true);else this.waveDelay=3;}
    }else for(const e of this.enemies)animateRobot(e.mesh,this.now,2);
    this.updateProjectiles(dt);this.updatePickups(dt);
-   if(this.state.mode==='versus'){this.roundTimer-=dt;if(this.roundTimer<=0&&(!this.network?.connected||this.network.isHost)){if(this.duel)this.duel.checkEnd(true);else this.finish(true);}}
+   if(this.state.mode==='versus'&&!this.online){this.roundTimer-=dt;if(this.roundTimer<=0&&(!this.network?.connected||this.network.isHost)){if(this.duel)this.duel.checkEnd(true);else this.finish(true);}}
    this.noticeTime=Math.max(0,this.noticeTime-dt);if(this.noticeTime===0)this.state.notice='';this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)this.state.combo=0;
    this.updateNetwork(dt);
   }else if(phase==='menu'&&this.player){this.player.group.position.set(1,0,5.4);this.player.group.rotation.y=.22;this.player.update(dt,{aiming:true});if(this.buddy){this.buddy.group.position.set(-.8,0,5);this.buddy.group.rotation.y=.1;this.buddy.update(dt,{aiming:true});}const t=this.now*.08;this.camera.position.set(Math.sin(t)*1.5+2.8,2.6,10.7);this.camera.lookAt(.1,1.05,5);}

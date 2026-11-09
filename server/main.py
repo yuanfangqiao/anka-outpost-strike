@@ -26,6 +26,12 @@ class FrontlineService(Service):
         return dict(root=str(ROOT), entry='dist/index.html', build=build,
                     protocol=1, maps=['desert', 'jungle', 'snow', 'city'],
                     characters=['male', 'female'],
+                    modes={
+                        'story': {'waves': 3},
+                        'survival': {'waves': 0},
+                        'coop': {'waves': 3},
+                        'versus': {'target': 10, 'duration': 180},
+                    },
                     guest_events=['player', 'action'],
                     host_events=['pvp-state', 'pvp-effect', 'pvp-finish'])
 

@@ -16,7 +16,7 @@ function resizeMobile(){Object.assign(mobile,mobileViewport());}
 function clearControls(){if(!engine)return;engine.keys.clear();engine.touchMove={x:0,y:0};engine.heldFire=false;}
 function deviceChanged(){clearControls();resizeMobile();inputVersion.value++;}
 const room=ref(null),invite=ref(null),roomBusy=ref(false),roomError=ref(''),leavePrompt=ref(false);
-let preparing='',disposed=false;
+let preparing='',loadingAck='',ackTimer,disposed=false;
 const state=reactive({phase:'loading',loading:0,map:'desert',mode:'versus',character:'male',hp:120,maxHp:120,shield:0,ammo:28,reserve:196,weapon:0,grenades:3,medkits:3,shieldCharges:2,wave:0,kills:0,score:0,elapsed:0,remaining:0,message:'正在准备行动',notice:'',aimX:50,aimY:50});
 const showMenuToolbar=computed(()=>state.phase==='menu'&&(!room.value||['playing','finished'].includes(room.value.phase)));
 const showHudToolbar=computed(()=>!mobile.enabled&&state.phase==='playing'&&(!room.value||['playing','finished'].includes(room.value.phase)));
@@ -43,47 +43,71 @@ onMounted(()=>{
  window.addEventListener('orientationchange',deviceChanged);document.addEventListener('fullscreenchange',deviceChanged);
  try{
   engine=new AnkaGame(viewport.value,s=>{Object.assign(state,s);if(s.perspective&&settings.perspective!==s.perspective){settings.perspective=s.perspective;saveSettings();}nextTick(drawMinimap);window.parent.postMessage({type:'anka-game-back-state',value:!!room.value||!['menu','loading'].includes(s.phase)},location.origin);});
-  network=new GameNetwork({onEvent:(payload,id)=>Promise.resolve(engine.consumeNetwork(payload,id)).catch(console.error),onStatus:s=>{Object.assign(networkStatus,s);engine.networkStatus(s);if(s.state==='disconnected'&&engine.online){engine.state.phase='waiting';engine.heldFire=false;engine.emit();}},onRoom:value=>syncRoom(value).catch(error=>{roomError.value=error.message;})});
+  network=new GameNetwork({onEvent:(payload,id)=>Promise.resolve(engine.consumeNetwork(payload,id)).catch(console.error),
+   onStatus:s=>{Object.assign(networkStatus,s);if(s.state!=='connected')pauseRoom();engine.networkStatus(s);},
+   onRoom:value=>syncRoom(value).catch(error=>{roomError.value=error.message;})});
   engine.setNetwork(network);engine.setPerspective(settings.perspective);engine.setMuted(settings.muted);engine.setQuality(settings.quality);
   engineReady.value=true;
   network.restore().catch(error=>{roomError.value=error.message;});
   window.addEventListener('message',onHostBack);
  }catch(error){state.phase='error';state.message=`无法启动三维画面：${error.message}`;console.error(error);}
 });
-onBeforeUnmount(()=>{window.removeEventListener('resize',deviceChanged);window.visualViewport?.removeEventListener('resize',deviceChanged);window.removeEventListener('orientationchange',deviceChanged);document.removeEventListener('fullscreenchange',deviceChanged);disposed=true;window.removeEventListener('message',onHostBack);network?.close();engine?.dispose();});
+onBeforeUnmount(()=>{window.removeEventListener('resize',deviceChanged);window.visualViewport?.removeEventListener('resize',deviceChanged);window.removeEventListener('orientationchange',deviceChanged);document.removeEventListener('fullscreenchange',deviceChanged);disposed=true;clearTimeout(ackTimer);window.removeEventListener('message',onHostBack);network?.close();engine?.dispose();});
+function pauseRoom(){
+ if(!engine.online||engine.online.ended)return;
+ if(!engine.online.host)engine.online.waitingForState=true;
+ engine.state.phase='waiting';clearControls();document.exitPointerLock?.();
+}
+async function acknowledgeLoad(round){
+ if(loadingAck===round||!network.connected||network.room?.round!==round||network.room?.phase!=='loading')return;
+ loadingAck=round;
+ try{await network.command('loaded',{round});}
+ catch{
+  if(network.room?.round===round){
+   clearTimeout(ackTimer);
+   ackTimer=setTimeout(()=>acknowledgeLoad(round),1500);
+  }
+ }finally{if(loadingAck===round)loadingAck='';}
+}
 async function syncRoom(value){
  room.value=value;if(!value||disposed)return;
  if(Object.keys(value.players).length>1)invite.value=null;
- if(value.phase==='closed'){roomError.value=value.notice;engine.heldFire=false;engine.state.phase='waiting';engine.emit();return;}
- await engine.ready;if(disposed||network.room?.id!==value.id)return;
+ if(!['playing','finished'].includes(value.phase)||!network.connected)pauseRoom();
+ if(value.phase==='closed'){roomError.value=value.notice;engine.emit();return;}
+ await engine.ready;if(disposed||network.room!==value)return;
  const me=value.players[value.self];if(!me)return;
  if(value.phase==='lobby'){
-  if(engine.state.phase!=='menu')engine.toMenu();network.currentRound='';preparing='';
+  if(engine.state.phase!=='menu')engine.toMenu();network.currentRound='';preparing='';clearTimeout(ackTimer);
   engine.preview(value.map,me.character);engine.emit();return;
  }
- if(value.phase==='loading'&&preparing!==value.round){
-  preparing=value.round;network.currentRound=value.round;
+ if(network.connected&&value.round&&engine.roundId!==value.round&&preparing!==value.round&&
+    (value.phase==='loading'||!network.isHost||value.phase==='finished')){
+  preparing=value.round;
   try{
-   await engine.start({session:value.round,map:value.map,mode:'versus',character:me.character});
+   await engine.start({session:value.round,map:value.map,mode:value.mode||'versus',character:me.character,online:true});
    if(disposed||network.room?.round!==value.round)return;
-   new OnlineDuel(engine,value);engine.state.phase='waiting';engine.emit();
-   await network.command('loaded',{round:value.round});
+   new OnlineDuel(engine,network.room);network.currentRound=value.round;
+   value=network.room;
   }catch(error){roomError.value='战场准备失败：'+error.message;}
  }
  if(engine.online&&engine.roundId===value.round){
   engine.online.room=value;
-  if(value.phase==='playing'&&!engine.online.ended)engine.state.phase='playing';
-  else if(['loading','countdown','reconnecting'].includes(value.phase)){engine.state.phase='waiting';engine.heldFire=false;engine.keys.clear();}
+  if(value.phase==='finished'&&value.result!=null)engine.online.applyResult(value.result);
+  if(value.phase==='playing'&&network.connected){
+   if(!engine.online.ended&&!engine.online.waitingForState)engine.state.phase='playing';
+   engine.online.confirmFinish();
+  }
+  if(value.phase==='loading'&&!value.players[value.self].loaded)acknowledgeLoad(value.round);
   engine.emit();
  }
 }
 async function roomAction({action,args={}}){if(roomBusy.value)return;roomBusy.value=true;roomError.value='';try{await network.command(action,args);}catch(error){roomError.value=error.message;}finally{roomBusy.value=false;}}
 async function refreshInvite(){roomBusy.value=true;roomError.value='';try{invite.value=await network.refreshInvite();}catch(error){roomError.value=error.message;}finally{roomBusy.value=false;}}
-async function leaveRoom(){try{await network.leave();}catch(error){console.error(error);}engine.toMenu();invite.value=null;roomError.value='';leavePrompt.value=false;preparing='';}
+async function leaveRoom(){if(roomBusy.value)return;roomBusy.value=true;try{await network.leave();engine.toMenu();invite.value=null;roomError.value='';leavePrompt.value=false;preparing='';}catch(error){roomError.value=error.message;leavePrompt.value=false;}finally{roomBusy.value=false;}}
 function retry(){if(room.value){if(network.isHost)roomAction({action:'lobby'});else roomError.value='请等待房主返回大厅，再次准备';}else start(lastConfig);}
 function onHostBack(event){if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='anka-game-back')return;if(room.value)leavePrompt.value=true;else if(state.phase!=='menu')engine.toMenu();}
 async function start(config){enterLandscape();if(network?.connected&&!network.isHost){networkStatus.error='请等待房主部署小队';return;}lastConfig={...lastConfig,...config};try{await engine.start(lastConfig);}catch(error){state.phase='error';state.message=error.message;}}
-async function host(config){enterLandscape();engine.fx.unlockAudio();roomBusy.value=true;roomError.value='';lastConfig={...lastConfig,...config};try{const data=await network.host(config);invite.value=data.invite;}catch(error){networkStatus.error=error.message;roomError.value=error.message;}finally{roomBusy.value=false;}}
+async function host(config){if(roomBusy.value)return;enterLandscape();engine.fx.unlockAudio();roomBusy.value=true;roomError.value='';try{const data=await network.host(config);invite.value=data.invite;}catch(error){if(!error.status||error.code==='active_room')await network.restore();else Object.assign(networkStatus,{state:'error',error:error.message});}finally{roomBusy.value=false;}}
 function join(){networkStatus.error='请打开房主分享的邀请链接，或扫描二维码加入。';}
 function disconnect(){if(room.value)leaveRoom();else{network?.close();engine?.toMenu();}}
 function menu(){if(room.value)retry();else engine?.toMenu();}
@@ -100,8 +124,8 @@ function touchLook(delta){if(!engine||state.phase!=='playing')return;delta=gameD
   <ControllerControls v-if="engineReady&&!mobile.enabled" :game="engine" :room="room" :phase="state.phase" :menu-toolbar="showMenuToolbar" :hud-toolbar="showHudToolbar" />
   <GameUI v-show="!room||['playing','finished'].includes(room.phase)" :state="state" :mobile="mobile.enabled" :rotated="mobile.rotated" :input-version="inputVersion" :network-status="networkStatus" @start="start" @preview="engine?.preview($event.map,$event.character)" @pause="engine?.pause()" @resume="engine?.resume()" @menu="menu" @retry="retry" @weapon="engine?.setWeapon($event)" @ability="ability" @mute="mute" @quality="quality" @host="host" @join="join" @disconnect="disconnect" @touch-move="engine && (engine.touchMove=$event)" @touch-look="touchLook" @fire="setFire" @aim="setAim" @fullscreen="enterLandscape" />
   <PlayControls v-if="!room||['playing','finished'].includes(room.phase)" :state="state" :menu-toolbar="showMenuToolbar" :hud-toolbar="showHudToolbar" @perspective="engine?.setPerspective($event)" @interact="engine?.interact()" />
-  <RoomLobby v-if="room&&(!['playing','finished'].includes(room.phase)||['disconnected','error'].includes(networkStatus.state))" :room="room" :invite="invite" :status="networkStatus" :busy="roomBusy" :error="roomError" @command="roomAction" @invite="refreshInvite" @leave="leaveRoom" />
-  <div v-if="room&&['playing','finished'].includes(room.phase)" class="online-room-controls"><span>{{networkStatus.ping||'—'}} ms · {{room.code}}</span><button v-if="room.self===room.host" @click="roomAction({action:'lobby'})">返回大厅</button><button @click="leaveRoom">离开房间</button><p v-if="roomError" role="alert">{{roomError}}</p></div>
+  <RoomLobby v-if="room&&(!['playing','finished'].includes(room.phase)||networkStatus.state!=='connected'||state.phase==='waiting')" :room="room" :invite="invite" :status="networkStatus" :busy="roomBusy" :error="roomError" @command="roomAction" @invite="refreshInvite" @reconnect="network.reconnect()" @leave="leaveRoom" />
+  <div v-if="room&&['playing','finished'].includes(room.phase)&&networkStatus.state==='connected'&&state.phase!=='waiting'" class="online-room-controls"><span>{{networkStatus.ping||'—'}} ms · {{room.name||room.code}}</span><button v-if="room.self===room.host" @click="roomAction({action:'lobby'})">返回大厅</button><button @click="leaveRoom">离开房间</button><p v-if="roomError" role="alert">{{roomError}}</p></div>
   <div v-if="leavePrompt" class="leave-room-dialog" role="dialog" aria-modal="true" aria-label="离开房间"><div><h2>离开这个房间？</h2><p>{{room?.self===room?.host?'离开后会关闭房间，好友也将结束访问。':'离开后需要新的邀请才能再次加入。'}}</p><button @click="leavePrompt=false">继续游戏</button><button @click="leaveRoom">离开房间</button></div></div>
  </main>
 </template>

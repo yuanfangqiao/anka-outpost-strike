@@ -30,7 +30,7 @@ const aim = computed(() => ({ left: `${Math.max(0, Math.min(100, Number(s.value.
 const net = computed(() => props.networkStatus || (s.value.network && typeof s.value.network === 'object' ? s.value.network : { state: s.value.network || 'offline' }));
 const roomCode = computed(() => net.value.code || (typeof s.value.room === 'object' ? s.value.room?.code : s.value.room) || '');
 const peerCount = computed(() => Number(net.value.peers ?? (Array.isArray(s.value.peers) ? s.value.peers.length : s.value.peers)) || (roomCode.value ? 1 : 0));
-const netBusy = computed(() => net.value.state === 'joining' || (net.value.state === 'hosting' && !roomCode.value));
+const netBusy = computed(() => ['joining','hosting','disconnected'].includes(net.value.state));
 const netError = computed(() => String(net.value.error?.message || net.value.error || ''));
 const netLabel = computed(() => ({ offline:'本地作战', idle:'尚未连接', hosting:roomCode.value ? '等待队员加入' : '正在创建房间', joining:'正在建立连接', connected:'小队已连接', disconnected:'连接已断开', error:'联机失败', closed:'已离开房间' }[net.value.state] || '本地作战'));
 const objective = computed(() => s.value.mode==='versus'?'三分钟对战 · 争夺击杀':typeof s.value.goal === 'string' ? s.value.goal : '清除区域内的机器军团');
@@ -59,7 +59,7 @@ function selectWeapon(index){emit('weapon',index);weaponsOpen.value=false;}
 function start() { emit('start', { map: selectedMap.value, mode: selectedMode.value, character: selectedCharacter.value }); }
 function toggleMute() { muted.value = !muted.value; emit('mute', muted.value); }
 function setQuality(value) { quality.value = value; emit('quality', value); }
-function host() { selectedMode.value = 'versus'; emit('host', { mode: selectedMode.value, map: selectedMap.value, character: selectedCharacter.value }); }
+function host() { emit('host', {character:selectedCharacter.value}); }
 function join() { const code = joinCode.value.trim().toUpperCase().replace(/^ANKA-/, ''); if (!/^[A-Z0-9]{6}$/.test(code)) { joinError.value = '请输入六位房间码'; return; } joinError.value = ''; emit('join', { code, character: selectedCharacter.value }); }
 function selectMap(id) { selectedMap.value = id; }
 function ability(name) { emit('ability', name); }
@@ -146,7 +146,7 @@ const mapIcon = id => ({ desert:'mountain', jungle:'tree', snow:'snow', city:'ci
           <div class="section-label"><span>03</span><h2>选择先锋</h2><small>SELECT OPERATIVE</small></div>
           <div class="character-options"><button v-for="character in ['male','female']" :key="character" type="button" class="character-option" :class="[character,{selected:selectedCharacter===character}]" :aria-label="`选择${character==='male'?'男':'女'}角色：${characterName(character)}`" :aria-pressed="selectedCharacter===character" @click="selectedCharacter=character"><span class="operative-symbol">{{character==='male'?'J':'K'}}</span><span><strong>{{characterName(character)}}</strong><small>{{character==='male'?'ASSAULT / 突击':'RECON / 侦察'}}</small></span><Icon v-if="selectedCharacter===character" name="check"/></button></div>
           <div class="mission-brief"><span class="mini-label">MISSION BRIEF / 作战简报</span><h3>{{activeMap.name}}<span> / {{activeMode.name}}</span></h3><p>{{selectedMode==='versus'?'蓝方由你控制，红方为人机。先得 10 分，或三分钟结束时比分领先即获胜。':activeMap.description}}</p><div><span><i/>七类武器自由切换</span><span>{{s.perspective==='first'?'第一人称':'第三人称'}} · 3D</span></div></div>
-          <div class="network-lobby"><button class="secondary-button create-room" type="button" :disabled="netBusy" @click="host"><Icon name="link"/>{{netBusy?'正在创建房间…':'邀请好友 · 双人对战'}}</button><p v-if="netError" class="network-error" role="alert">{{netError}}</p><p class="network-note">创建房间后分享二维码或链接 · 好友免注册加入</p></div>
+          <div class="network-lobby"><button class="secondary-button create-room" type="button" :disabled="netBusy" @click="host"><Icon name="link"/>{{netBusy?'正在创建房间…':'创建好友房间'}}</button><p v-if="netError" class="network-error" role="alert">{{netError}}</p><p class="network-note">邀请好友加入后，在房间内选择游戏模式</p></div>
           <button class="launch-button" type="button" :aria-label="selectedMode==='versus'&&!roomCode?'开始人机对战':'开始任务'" :disabled="netBusy || (!!roomCode && net.isHost===false)" @click="start"><span><small>{{roomCode?'SQUAD DEPLOYMENT':'READY TO DEPLOY'}}</small><strong>{{roomCode?(net.isHost===false?'等待房主部署':'部署小队'):(selectedMode==='versus'?'开始对战':'开始任务')}}</strong></span><Icon name="arrow"/></button>
           <div class="launch-foot"><span class="status-light"/>{{roomCode?`${peerCount} 名先锋已就位`:'装备就绪 · 等待出发'}}<span>ENTER THE FRONTLINE</span></div>
         </div>

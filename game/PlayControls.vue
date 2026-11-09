@@ -10,7 +10,10 @@ const emit=defineEmits(['perspective','interact']);
    <span>{{state.perspective==='first'?'第一人称':'第三人称'}}</span><kbd>V</kbd>
   </button>
   </Teleport>
-  <button v-if="state.phase==='playing'&&state.pickup" class="pickup-prompt" :disabled="state.pickup.full" aria-label="拾取附近道具" @pointerdown.stop @click="emit('interact')">
+  <button v-if="state.phase==='playing'&&state.revive" class="pickup-prompt" aria-label="救起队友" @pointerdown.stop @click="emit('interact')">
+   <span class="pickup-mark">＋</span><strong>救起队友</strong><kbd>F</kbd>
+  </button>
+  <button v-else-if="state.phase==='playing'&&state.pickup" class="pickup-prompt" :disabled="state.pickup.full" aria-label="拾取附近道具" @pointerdown.stop @click="emit('interact')">
    <span class="pickup-mark">＋</span><span><strong>{{state.pickup.label}}</strong><small>{{state.pickup.full?'携带数量已满': '靠近自动拾取 · 点击 / F 拾取'}}</small></span><kbd>F</kbd>
   </button>
  </div>

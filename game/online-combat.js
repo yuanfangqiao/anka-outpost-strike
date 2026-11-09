@@ -7,7 +7,10 @@ export function damage(duel,target,amount,shooter){
  if(!duel.host||target.hp<=0||target.protection>0||target.immunity>0||duel.ended)return false;
  const shield=Math.min(target.shield,amount);target.shield-=shield;target.hp=Math.max(0,target.hp-amount+shield);target.immunity=.12;
  if(target.hp===0){target.deaths++;target.respawn=3;const killer=duel.players[shooter];if(killer&&killer!==target)killer.kills++;}
- duel.publish();if(Object.values(duel.players).some(p=>p.kills>=duel.room.rules.target))duel.finish();return true;
+ duel.publish();
+ const players=Object.values(duel.players);
+ if(duel.versus?players.some(p=>p.kills>=duel.room.rules.target):players.every(p=>p.hp<=0))duel.finish();
+ return true;
 }
 
 export function act(duel,id,payload){
@@ -15,7 +18,13 @@ export function act(duel,id,payload){
  const weapon=Number.isInteger(payload.weapon)?payload.weapon:p.weapon;
  if(weapon<0||weapon>=WEAPONS.length)return;
  p.weapon=weapon;const w=WEAPONS[weapon],ammo=p.inventory[weapon],now=g.now;
- if(payload.action==='pickup'){
+ if(payload.action==='revive'&&duel.room.mode==='coop'){
+  const ally=Object.values(duel.players).find(other=>other.id!==id&&other.hp<=0);
+  if(ally&&v(ally.p).distanceTo(v(p.p))<3){
+   Object.assign(ally,{hp:70,respawn:0,protection:2,spawn:ally.spawn+1});
+   duel.effect({kind:'heal',p:ally.p});
+  }
+ }else if(payload.action==='pickup'){
   const node=duel.supplies.nodes.find(node=>node.id===payload.pickupId);
   if(node&&duel.supplies.claim(node,p,v(p.p),2.4))duel.effect({kind:'pickup',supply:node.kind,player:id,p:node.mesh.position.toArray()});
  }else if(payload.action==='reload'){
@@ -39,6 +48,11 @@ export function act(duel,id,payload){
    if(w.projectile){g.launchProjectile(origin,direction.clone().multiplyScalar(w.projectile==='rocket'?24:18).add(new THREE.Vector3(0,w.projectile==='rocket'?0:3,0)),{team:'player',shooter:id,damage:w.damage,radius:w.radius,gravity:w.projectile==='rocket'?0:9,fuse:w.projectile==='rocket'?2.5:1.8,kind:w.projectile});}
    else for(let i=0;i<w.pellets;i++){
     const dir=direction.clone().add(new THREE.Vector3((Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread,(Math.random()-.5)*w.spread)).normalize();
+    if(!duel.versus){
+     const to=g.resolveShot(origin,dir,w,id,id===duel.local);
+     if(i<3)duel.effect({kind:'shot',from:origin.toArray(),to:to.toArray(),color:w.color,weapon,shooter:id});
+     continue;
+    }
     const ray=new THREE.Ray(origin,dir);let distance=w.range,target=null;
     for(const c of g.world.colliders){const hit=ray.intersectBox(new THREE.Box3(new THREE.Vector3(c.minX,0,c.minZ),new THREE.Vector3(c.maxX,c.height,c.maxZ)),new THREE.Vector3());if(hit)distance=Math.min(distance,hit.distanceTo(origin));}
     for(const other of Object.values(duel.players))if(other.id!==id&&other.hp>0){
@@ -56,8 +70,16 @@ export function act(duel,id,payload){
 }
 
 export function explosion(duel,projectile){
- if(!duel.host)return;
+ if(!duel.host||duel.ended)return;
  const pos=projectile.mesh.position;
+ if(!duel.versus&&projectile.team==='player'){
+  for(const enemy of duel.game.enemies){
+   const distance=pos.distanceTo(enemy.mesh.position);
+   if(distance<projectile.radius)duel.game.damageEnemy(enemy,projectile.damage*(1-.65*distance/projectile.radius));
+  }
+  duel.effect({kind:'explosion',p:pos.toArray(),radius:projectile.radius});
+  return;
+ }
  for(const p of Object.values(duel.players)){
   if(p.id===projectile.shooter||p.hp<=0)continue;
   const target=v(p.p).add(new THREE.Vector3(0,1,0)),distance=target.distanceTo(pos);

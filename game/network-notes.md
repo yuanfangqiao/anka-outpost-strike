@@ -4,13 +4,14 @@
 
 - A logged-in owner creates a two-seat room and receives a single-use invitation valid for ten minutes.
 - The invite landing page exchanges the fragment credential for an HttpOnly visitor cookie valid for twenty-four hours. No long-lived credential is stored in JavaScript storage or URLs.
-- Session storage keeps only the last public room ID for same-tab owner refresh. It does not grant room access.
+- Session storage keeps the last room ID. The authenticated current-room endpoint also resolves the room and stable player ID across pages.
 - WebSocket hello verifies the compiled build ID and protocol. The server determines sender identity and restricts game event types by role.
-- Lobby selections, readiness, loading acknowledgements, countdown and membership are server-owned. Each combat envelope is bound to the current round.
+- Room membership is independent of the mode. After the guest joins, the host chooses the mode and map. The server owns selections, readiness, loading acknowledgements and countdown. Each combat envelope is bound to the current round.
 - Host sends `pvp-state`, `pvp-effect`, `pvp-finish`; guest sends `player` and `action`. Guest HP, ammunition and scores are never authoritative.
 - Frames are bounded and the client avoids unbounded buffered sends. Periodic heartbeats measure round-trip time and server clock offset.
-- Transient disconnect reconnects automatically. A new page with no matching live simulation returns both players to the lobby; its valid visitor cookie is retained.
-- A kicked player or a closed room loses access immediately. Closing the iframe disconnects transport and starts the server's thirty-second grace period.
+- The room pauses on disconnect and keeps both seats until session expiry. Reconnecting sockets can replace an old socket for the same authenticated player. A resumed guest receives a fresh snapshot before enabling input.
+- Guests can reload and continue against the live host simulation. Opening a fresh host page keeps the same room and seats and returns an active round to the lobby.
+- Kicking a player or closing a room revokes access immediately.
 
 The separate invitation TTL never limits an already joined player's session. The owner can return to the lobby for rematches without redeeming a new invitation.
 

@@ -2,9 +2,9 @@
   "manifest_version": 2,
   "id": "anka-outpost-strike",
   "name": "ANKA 前线对决",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "icon": "crosshair",
-  "description": "扫码邀请好友对战，或接入手机与ESP-Mosaico手柄控制当前角色。",
+  "description": "创建房间邀请好友，选择合作或对战模式，支持断线重连和手机、ESP-Mosaico 手柄。",
   "kind": "app",
   "system": false,
   "backend": {

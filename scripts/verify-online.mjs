@@ -30,3 +30,28 @@ gd.consume({type:'pvp-finish',scores:{host:99,guest:0}},'intruder');assert.equal
 gd.consume({type:'pvp-finish',scores:{host:2,guest:2}},'host');assert.equal(gd.result,'draw');assert.equal(guest.state.phase,'victory');
 guest.clearBattle();guest.world.dispose();
 console.log('Online authority, teleport rejection, fire rate, damage, respawn, abilities, first-to-ten and guest results passed.');
+
+const missionRoom={...room,mode:'coop',round:'coop-1',phase:'playing',rules:{waves:3}};
+const leader=fixture(),partner=fixture(),missionPackets=[];
+leader.network={connected:true,isHost:true,localId:'host',broadcast:p=>missionPackets.push(p),command:()=>Promise.resolve()};
+partner.network={connected:true,isHost:false,localId:'guest'};
+for(const game of [leader,partner])await game.start({mode:'coop',online:true,session:missionRoom.round});
+const mission=new OnlineDuel(leader,missionRoom),remoteMission=new OnlineDuel(partner,missionRoom);
+leader.state.phase='playing';
+leader.nextWave();leader.spawnEnemy('walker');
+leader.telegraph(leader.player.group.position,4);
+mission.tick(.1);
+remoteMission.consume(missionPackets.at(-1),'host');
+assert.equal(partner.state.phase,'playing','guest waits for the host snapshot before playing');
+assert.equal(partner.state.wave,1);
+assert.equal(partner.enemies[0].id,leader.enemies[0].id);
+assert.equal(partner.telegraphs[0].radius,4);
+const ally=mission.players.guest;
+ally.p=[...mission.players.host.p];ally.protection=0;
+leader.damageTarget('guest',120);assert.equal(ally.hp,0);
+act(mission,'host',{action:'revive'});assert.equal(ally.hp,70);
+leader.finish(true);
+remoteMission.consume(missionPackets.at(-1),'host');
+assert.equal(partner.state.phase,'victory','both players receive the same mission result');
+for(const game of [leader,partner]){game.clearBattle();game.world.dispose();}
+console.log('Online mission state, enemy and hazard replication, co-op revival and shared results passed.');
